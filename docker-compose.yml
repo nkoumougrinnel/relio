@@ -1,0 +1,46 @@
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
+  frontend-web:
+    build: ./apps/admin-dashboard
+    container_name: dashboard
+    ports:
+      - "3000:80"
+    env_file:
+      - ./apps/admin-dashboard/.env
+    depends_on:
+      - backend
+
+  frontend-mobile:
+    build: ./apps/mobile
+    container_name: mobile
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./apps/mobile/.env
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: relio
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
