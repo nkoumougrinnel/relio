@@ -1,0 +1,1662 @@
+RELIO — Cahier des charges produit
+
+CAHIER DES CHARGES PRODUIT
+
+RELIO
+
+Plateforme intelligente d'attribution
+automatisée des prestataires de services du
+quotidien en Afrique urbaine.
+
+« Décrivez votre problème. Relio trouve la bonne
+personne pour le résoudre. »
+
+DOCUMENT
+
+Cahier des charges produit — MVP V1
+
+VERSION
+
+1.0 — Édition consolidée
+
+STATUT
+
+Document de conception produit — Diffusion
+interne & partenaires
+
+PÉRIMÈTRE
+
+MVP commercialisable — Douala & Yaoundé
+
+PORTEUR DE PROJET
+
+Wilfried — Co-fondateur Relio
+
+DATE
+
+Juillet 2026
+
+Sommaire
+Ce document constitue la référence produit unique de Relio : vision, périmètre fonctionnel, moteur
+d'intelligence d'attribution, exigences UX, architecture technique et feuille de route.
+
+Avant-propos
+
+3
+
+1. Résumé exécutif
+
+4
+
+2. Vision et positionnement du produit
+
+5
+
+3. Objectifs du MVP
+
+7
+
+4. Utilisateurs cibles
+
+8
+
+5. Principes produit fondamentaux
+
+9
+
+6. Architecture globale du produit
+
+10
+
+7. Le moteur intelligent Relio — le cœur du produit
+
+11
+
+7.1 – 7.4 Comprendre le problème de l'utilisateur
+7.5 – 7.10 Déterminer et attribuer le bon professionnel
+
+8. Périmètre fonctionnel détaillé du MVP
+
+11
+14
+
+17
+17
+19
+19
+
+Module A — Application Client
+Module B — Application Prestataire
+Module C — Dashboard Administrateur
+
+9. Parcours utilisateur illustré
+
+21
+
+10. Fonctionnalités volontairement exclues du MVP
+
+22
+
+11. Exigences UX / UI
+
+23
+
+12. Identité visuelle
+
+24
+
+13. Architecture technique et stack recommandée
+
+25
+
+14. Critères de réussite du MVP
+
+26
+
+15. Facteurs clés de succès et points de vigilance
+
+27
+
+16. Feuille de route produit — V1, V2, V3
+
+28
+
+17. Glossaire
+
+29
+
+18. Conclusion
+
+30
+
+2
+
+RELIO — Cahier des charges produit
+
+Avant-propos
+
+CADRAGE DU DOCUMENT
+
+Avant-propos
+Ce cahier des charges rassemble en un seul document de référence l'ensemble des
+décisions de conception prises pour la première version commercialisable de Relio : sa
+vision, son périmètre fonctionnel, la logique de son moteur d'attribution, ses exigences
+d'expérience utilisateur, son architecture technique et sa trajectoire d'évolution.
+Il s'adresse à trois publics :
+▸
+
+L'équipe produit et technique, qui y trouve le détail des fonctionnalités à construire
+et les choix d'architecture recommandés.
+
+▸
+
+Les partenaires et investisseurs potentiels, qui y trouvent la démonstration d'une
+vision structurée et d'un modèle différenciant.
+
+▸
+
+Les futurs collaborateurs de Relio (prestataires, opérateurs, partenaires locaux), qui
+y trouvent une explication claire de la manière dont la plateforme fonctionne.
+NOTE DE LECTURE
+
+Le document est volontairement rédigé dans un langage clair et accessible. Les sections
+techniques restent lisibles par un public non technique, tandis que les sections produit et
+stratégiques restent suffisamment précises pour guider directement le développement.
+
+3
+
+RELIO — Cahier des charges produit
+
+1. Résumé exécutif
+
+VUE D'ENSEMBLE
+
+1. Résumé exécutif
+Relio est une plateforme intelligente qui attribue automatiquement, à toute
+personne confrontée à un problème du quotidien, le professionnel le plus adapté
+pour le résoudre — sans que l'utilisateur ait besoin de savoir quel métier chercher,
+ni de comparer lui-même plusieurs prestataires.
+Le modèle inverse celui d'une marketplace classique. Là où une marketplace demande à
+l'utilisateur de rechercher, comparer et choisir, Relio comprend le besoin exprimé en
+langage naturel (texte ou voix) et attribue directement le professionnel le plus pertinent,
+selon un score dynamique combinant compétence, disponibilité, proximité, réputation et
+historique.
+Le MVP décrit dans ce document couvre l'intégralité du cycle de prestation — expression du
+besoin, compréhension, attribution, intervention, paiement, évaluation — à travers trois
+interfaces complémentaires : une application client, une application prestataire, et un
+dashboard administrateur permettant une supervision humaine pendant la phase
+d'amorçage.
+
+3
+
+7
+
+5
+
+Interfaces produit : Client,
+
+Étapes couvertes du cycle de
+
+Critères pondérés dans le
+
+Prestataire, Admin
+
+prestation
+
+Score Relio
+
+<60s
+Temps cible pour créer une demande
+
+Ce document constitue la base de travail pour le développement, le recrutement des
+premiers prestataires et la présentation du projet aux partenaires et investisseurs.
+
+4
+
+RELIO — Cahier des charges produit
+
+2. Vision et positionnement du produit
+
+FONDATIONS
+
+2. Vision et positionnement du produit
+2.1 Vision produit
+Relio ambitionne de devenir l'infrastructure intelligente qui permet à chaque personne de
+résoudre rapidement les problèmes qu'elle rencontre dans son quotidien, en la mettant
+automatiquement en relation avec le professionnel adapté.
+Relio ne fonctionne pas comme une marketplace classique, où l'utilisateur cherche lui-même
+parmi plusieurs prestataires. Relio inverse ce modèle :
+
+1
+Le client exprime
+
+→
+
+2
+Relio comprend
+
+→
+
+3
+Relio attribue
+
+son problème
+
+→
+
+4
+Le professionnel
+intervient
+
+2.2 Pourquoi pas une marketplace classique ?
+Une marketplace traditionnelle suppose que l'utilisateur connaît déjà la nature de son
+problème, le métier nécessaire pour le résoudre, et les critères qui lui permettront de choisir
+entre plusieurs offres. Dans la réalité, ce n'est presque jamais le cas.
+Un utilisateur ne pense pas en ces termes :
+
+« J'ai besoin d'un technicien frigoriste spécialisé en circuit de refroidissement. »
+
+Il pense plutôt :
+
+« Mon frigo ne marche plus. »
+
+Le véritable problème à résoudre se situe donc avant la recherche d'un prestataire : il faut
+d'abord comprendre ce que vit réellement l'utilisateur. C'est précisément le rôle du moteur
+intelligent de Relio, présenté en section 7.
+
+5
+
+RELIO — Cahier des charges produit
+
+2. Vision et positionnement du produit
+
+2.3 Proposition de valeur
+
+C
+CLIENT
+
+P
+
+R
+
+PRESTATAIRE
+
+RELIO
+
+Une solution, pas une
+
+Des missions
+
+Une infrastructure,
+
+recherche
+
+qualifiées, pas de la
+
+pas une appli de plus
+
+« Décrivez votre
+
+prospection
+
+Chaque intervention
+
+problème. Relio trouve la
+
+« Recevez des missions
+
+réalisée enrichit la
+
+bonne personne pour le
+
+qualifiées près de chez
+
+connaissance du moteur
+
+résoudre. » Le client n'a
+
+vous et développez votre
+
+Relio sur les problèmes
+
+rien d'autre à faire que
+
+activité. » Le prestataire
+
+réels et les meilleurs
+
+d'exprimer son besoin, en
+
+reçoit des demandes déjà
+
+professionnels pour les
+
+texte ou à l'oral.
+
+filtrées et pertinentes,
+
+résoudre.
+
+sans démarchage.
+
+2.4 Marché et contexte
+Relio est conçu pour l'Afrique urbaine, en commençant par les villes de Douala et Yaoundé
+au Cameroun. Ce contexte impose des choix de conception spécifiques : importance du
+message vocal face à la saisie texte, place centrale du Mobile Money dans le paiement, et
+nécessité d'un système de confiance fort pour un secteur des services largement informel.
+
+6
+
+RELIO — Cahier des charges produit
+
+3. Objectifs du MVP
+
+FONDATIONS
+
+3. Objectifs du MVP
+3.1 Objectif principal
+Le MVP doit démontrer que Relio est capable de gérer l'intégralité du cycle d'une prestation,
+de bout en bout :
+
+Expression du
+
+Compréhension
+
+Attribution d'un
+
+Réalisation de
+
+besoin
+
+de la demande
+
+professionnel
+
+l'intervention
+
+Paiement
+
+Évaluation
+
+3.2 Objectifs secondaires
+Au-delà de la démonstration technique, le MVP doit permettre à l'équipe Relio de :
+▸
+
+Créer une première base de clients actifs et engagés ;
+
+▸
+
+Recruter un réseau initial de prestataires fiables et vérifiés ;
+
+▸
+
+Mesurer la demande réelle pour les différentes catégories de services ;
+
+▸
+
+Mesurer les performances opérationnelles du modèle d'attribution ;
+
+▸
+
+Convaincre les partenaires et investisseurs de la viabilité du modèle.
+CE QUE LE MVP DOIT PROUVER
+
+La réussite du MVP ne se mesure pas au nombre de fonctionnalités livrées, mais à la
+qualité d'un seul parcours : Problème → Compréhension → Attribution → Résolution.
+Si ce parcours fonctionne de façon fiable, tout le reste devient un accélérateur — pas une
+fondation.
+
+7
+
+RELIO — Cahier des charges produit
+
+4. Utilisateurs cibles
+
+FONDATIONS
+
+4. Utilisateurs cibles
+Le MVP s'adresse à trois profils d'utilisateurs, correspondant chacun à une interface dédiée.
+Profil
+
+Description
+
+Exemples de besoins / rôle
+
+Client
+
+Particulier urbain, utilisateur
+
+Panne électrique, fuite d'eau,
+
+particulier
+
+Android, à la recherche de
+
+réparation de téléphone, problème
+
+simplicité et de confiance face à
+
+automobile, entretien de la
+
+un besoin ponctuel ou urgent.
+
+maison.
+
+Artisan, technicien, indépendant
+
+Plombier, électricien, réparateur
+
+ou petite entreprise de services, à
+
+électronique, technicien
+
+la recherche de missions qualifiées
+
+climatisation.
+
+Prestataire
+
+sans effort de prospection.
+Administrateur
+
+Membre de l'équipe opérationnelle
+
+Supervision, validation des profils,
+
+Relio
+
+Relio, chargé de la supervision
+
+ajustement des attributions,
+
+humaine du système pendant la
+
+analyse de la performance.
+
+phase d'amorçage.
+
+C
+
+P
+
+A
+
+CLIENT PARTICULIER
+
+PRESTATAIRE
+
+ADMINISTRATEUR
+
+• Recherche la simplicité
+
+• Cherche à développer
+
+• Garantit la qualité du
+
+• A besoin d'être rassuré
+avant l'intervention
+• Préfère parfois parler
+plutôt qu'écrire
+
+son activité
+• Veut des missions
+pertinentes, pas du
+bruit
+
+réseau
+• Peut corriger une
+attribution
+• Pilote la performance
+
+• A besoin de visibilité
+sur sa réputation
+
+8
+
+globale
+
+RELIO — Cahier des charges produit
+
+5. Principes produit fondamentaux
+
+FONDATIONS
+
+5. Principes produit fondamentaux
+Trois principes guident chaque décision de conception du MVP.
+
+5.1 Simplicité
+L'utilisateur ne doit jamais avoir besoin de connaître le métier correspondant à son
+problème. Il ne cherche pas « technicien électroménager », il explique : « Mon frigo fait du
+bruit et ne refroidit plus. » C'est à Relio d'identifier le besoin — jamais à l'utilisateur de le
+traduire en langage métier.
+Contrainte associée : un maximum de 3 clics avant la création d'une demande.
+
+5.2 Confiance
+Le produit doit rassurer avant la prestation, pas seulement après. La confiance repose sur la
+visibilité des profils professionnels, la notation, l'historique d'interventions, la vérification
+d'identité et la transparence des informations affichées (prix estimatif, distance,
+disponibilité).
+
+5.3 Rapidité
+Le parcours doit être court à chaque étape. Objectif : permettre à un utilisateur de créer une
+demande complète en moins de 60 secondes, du problème exprimé jusqu'à la confirmation
+d'envoi.
+
+9
+
+RELIO — Cahier des charges produit
+
+6. Architecture globale du produit
+
+FONDATIONS
+
+6. Architecture globale du produit
+Le produit Relio repose sur trois interfaces reliées par un moteur central
+d'attribution, lui-même connecté à une base de données commune.
+CLIENT
+Particulier exprimant un besoin
+
+▼
+Application Relio Client
+Saisie texte / vocal, suivi, paiement, évaluation
+
+▼
+API Backend
+Orchestration des échanges entre interfaces
+
+▼
+Moteur Attribution Relio
+Compréhension du besoin + scoring + matching
+
+▼
+Dashboard Administrateur
+Supervision, validation, arbitrage humain
+
+▼
+Application Prestataire
+Réception et gestion des missions
+
+Figure 1 — Architecture fonctionnelle globale de Relio
+
+Le Moteur Attribution Relio, placé au centre du schéma, est volontairement mis en
+évidence : c'est lui qui transforme une demande exprimée simplement par un client en une
+intervention attribuée à un professionnel précis. Il est décrit en détail dans la section
+suivante.
+PRINCIPE D'ARCHITECTURE
+
+Chaque interface (client, prestataire, admin) est un client léger de l'API Backend. Aucune
+logique métier critique n'est dupliquée entre les interfaces : la compréhension du besoin et
+le calcul d'attribution vivent exclusivement dans le Moteur Attribution.
+
+10
+
+RELIO — Cahier des charges produit
+
+7. Le moteur intelligent Relio — le cœur du produit
+
+LE DIFFÉRENCIANT RELIO
+
+7. Le moteur intelligent Relio — le cœur du
+produit
+L'application n'est que l'interface. La véritable valeur de Relio réside dans son
+moteur, capable de transformer un problème exprimé simplement par un humain en
+une intervention attribuée au professionnel ayant la plus forte probabilité de la
+résoudre.
+
+7.1 La mission du moteur
+Le moteur Relio doit répondre à deux questions, dans cet ordre :
+№
+
+Question
+
+1
+
+Quel est réellement le problème de l'utilisateur ?
+
+2
+
+Quel est le professionnel le plus pertinent pour résoudre ce problème ?
+
+7.2 Architecture en cinq couches
+UTILISATEUR
+
+▼
+1. Collecte de la demande
+Texte, voix, catégorie rapide
+
+▼
+2. Compréhension du problème
+Objet, symptôme, intention, urgence
+
+▼
+3. Classification du besoin
+Rattachement à la base de connaissance métier
+
+▼
+4. Matching professionnel
+Filtrage puis scoring des candidats
+
+11
+
+RELIO — Cahier des charges produit
+
+7. Le moteur intelligent Relio — le cœur du produit
+
+▼
+5. Attribution optimisée
+Recommandation du meilleur professionnel
+
+Figure 2 — Les cinq couches du moteur Relio
+
+7.3 Comprendre le langage humain du problème
+Le premier défi du moteur est que l'utilisateur ne parle pas le langage technique d'un
+métier. Relio doit donc comprendre un langage naturel, imparfait, et parfois incomplet.
+Exemple : « Mon climatiseur fait un bruit bizarre et souffle seulement de l'air chaud. »
+Information cachée
+
+Valeur détectée
+
+Équipement concerné
+
+Climatiseur
+
+Symptôme principal
+
+Bruit anormal
+
+Symptôme secondaire
+
+Absence de refroidissement
+
+Urgence probable
+
+Moyenne
+
+Métier nécessaire
+
+Technicien climatisation
+
+Les trois sources de compréhension
+▸
+
+Texte utilisateur : saisie libre, analysée pour en extraire l'objet et le problème (ex. : «
+Ma serrure est bloquée » → Objet : serrure, Problème : blocage, Métier : serrurier).
+
+▸
+
+Message vocal : essentiel dans le contexte camerounais, où de nombreux utilisateurs
+préfèrent parler plutôt qu'écrire. Le message est converti en texte puis analysé selon le
+même processus.
+
+▸
+
+Image (évolution future) : l'utilisateur pourra envoyer une photo de la panne ou de
+l'appareil concerné, pour une identification visuelle de l'objet et de l'anomalie.
+
+12
+
+RELIO — Cahier des charges produit
+
+7. Le moteur intelligent Relio — le cœur du produit
+
+7.4 Les quatre dimensions analysées
+Dimension
+
+Question posée
+
+Exemples
+
+Objet
+
+Sur quoi porte le problème ?
+
+Téléviseur, portail métallique,
+évier
+
+Symptôme
+
+Qu'est-ce qui ne fonctionne pas ?
+
+Ne s'allume plus, fuit, fait du
+bruit, chauffe
+
+Intention
+
+Que veut réellement l'utilisateur ?
+
+Réparer, installer, entretenir,
+remplacer
+
+Urgence
+
+Le problème peut-il attendre ?
+
+Critique, rapide, planifiable
+
+LES TROIS NIVEAUX D'URGENCE
+
+Critique : une canalisation explose. • Rapide : plus d'électricité dans la maison. •
+Planifiable : installer une climatisation.
+
+La base de connaissance métier
+Le moteur s'appuie sur une cartographie des problèmes qui fonctionne comme un
+dictionnaire métier : chaque problème identifié possède ses symptômes typiques, ses
+causes probables, les métiers associés et un niveau d'urgence par défaut.
+Domaine
+
+Exemples de problèmes répertoriés
+
+Plomberie
+
+Fuite au robinet, canalisation bouchée, pression faible, panne de chauffeeau
+
+Électricité
+
+Coupure intermittente, disjoncteur qui saute, prise défectueuse
+
+Climatisation
+
+Bruit anormal, absence de froid, fuite de liquide
+
+Serrurerie
+
+Serrure bloquée, clé cassée, porte qui ferme mal
+
+Exemple d'analyse : « Mon évier ne se vide plus » → Objet : évier — Symptôme : blocage — Causes
+possibles : canalisation bouchée ou siphon bloqué — Profession : plombier.
+
+13
+
+RELIO — Cahier des charges produit
+
+7. Le moteur intelligent Relio (suite)
+
+LE DIFFÉRENCIANT RELIO
+
+7. Le moteur intelligent Relio (suite)
+7.5 Le profil intelligent du prestataire
+Relio ne se limite pas à une liste de professionnels. Chaque prestataire possède un profil
+enrichi, construit à partir de trois familles de données :
+
+DONNÉES
+
+DONNÉES
+
+PROFESSIONNELLES
+
+COMPORTEMENTALES
+
+• Métier et compétences
+
+• Taux d'acceptation
+
+• Spécialités
+
+• Ponctualité
+
+• Zones couvertes
+
+• Satisfaction client
+
+• Expérience
+
+• Rapidité de réponse
+
+DONNÉES OPÉRATIONNELLES
+
+• Disponibilité actuelle
+• Interventions en cours
+• Distance au client
+
+7.6 Le Score Relio
+Chaque professionnel compatible avec une demande reçoit un score dynamique, recalculé à
+chaque nouvelle attribution, selon cinq critères pondérés :
+Compétence
+
+35 %
+
+Disponibilité
+
+20 %
+
+Distance
+
+20 %
+
+Réputation
+
+15 %
+
+Historique
+
+10 %
+Figure 3 — Pondération des critères du Score Relio
+
+7.7 Le processus de matching en trois étapes
+Exemple : une demande de réparation de climatiseur arrive sur la plateforme.
+
+14
+
+RELIO — Cahier des charges produit
+
+7. Le moteur intelligent Relio (suite)
+
+50
+
+10
+
+93
+
+profils
+
+profils
+
+/ 100
+
+→
+
+→
+
+Étape 1 — Compatibilité
+
+Étape 2 — Contraintes
+
+Étape 3 — Classement
+
+Filtre par métier : technicien
+
+Élimination : trop loin,
+
+Calcul du Score Relio et
+
+climatisation
+
+indisponibles, mauvaise spécialité
+
+recommandation du meilleur profil
+
+Figure 4 — Réduction progressive des candidats jusqu'à l'attribution
+
+Professionnel
+
+Compétence
+
+Distance
+
+Réputation
+
+Score final
+
+Professionnel A
+
+95
+
+90
+
+92
+
+93 / 100 — recommandé
+
+Professionnel B
+
+—
+
+—
+
+—
+
+82 / 100
+
+7.8 Le concept de « meilleur professionnel »
+Le meilleur professionnel n'est pas forcément le plus proche, le moins cher, ni le mieux
+noté. C'est celui qui maximise la probabilité de réussite de l'intervention. La question
+que résout le moteur est : « Qui a le plus de chances de résoudre ce problème
+correctement, dans ce contexte précis ? »
+
+7.9 Intervention humaine au démarrage et apprentissage
+progressif
+Le MVP ne nécessite pas une intelligence artificielle parfaite dès le premier jour. Au départ,
+le moteur peut fonctionner avec des règles métier, une base de données structurée, et une
+validation humaine via le Dashboard Administrateur : Relio propose un professionnel, un
+opérateur peut confirmer ou ajuster l'attribution.
+Chaque intervention réalisée génère des données (problème, professionnel choisi, résultat,
+satisfaction) qui permettent d'améliorer progressivement les recommandations futures —
+par exemple en identifiant que certains techniciens résolvent mieux certains types de
+pannes dans certains quartiers.
+
+7.10 L'avantage compétitif de Relio
+Une marketplace peut être copiée. Une application peut être copiée. Mais une infrastructure
+qui accumule des milliers de problèmes réels, des milliers d'interventions, des historiques
+professionnels et des taux de réussite mesurés devient beaucoup plus difficile à reproduire.
+
+15
+
+RELIO — Cahier des charges produit
+
+Niveau
+
+7. Le moteur intelligent Relio (suite)
+
+Capacité de matching
+
+MVP
+
+Règles métier, scores, validation humaine
+
+NIVEAU 2
+
+IA linguistique, recommandations automatiques, prédiction
+
+NIVEAU 3
+
+Intelligence prédictive — Relio anticipe la panne avant qu'elle ne soit
+décrite en détail
+
+16
+
+RELIO — Cahier des charges produit
+
+8. Périmètre fonctionnel détaillé du MVP
+
+SPÉCIFICATIONS
+
+8. Périmètre fonctionnel détaillé du MVP
+Le périmètre fonctionnel du MVP se répartit en trois modules : l'application Client,
+l'application Prestataire, et le Dashboard Administrateur.
+
+Module A — Application Client
+A1. Onboarding
+
+MVP
+
+Objectif : présenter la proposition de valeur et créer un compte en quelques secondes.
+▸
+
+Affichage du logo et présentation courte de Relio
+
+▸
+
+Création de compte : nom, numéro de téléphone, quartier, localisation
+
+A2. Page d'accueil principale
+
+MVP
+
+Objectif : permettre au client d'exprimer son problème — c'est le cœur de l'expérience
+Relio.
+Élément central : une barre de recherche intelligente avec le message « Décrivez votre
+problème... », proposant deux modes de saisie :
+▸
+
+Texte : ex. « Mon climatiseur ne marche plus »
+
+▸
+
+Vocal : ex. « Bonjour, ma télévision ne s'allume plus depuis hier »
+
+Sous la barre principale, des catégories rapides (Plomberie, Électricité, Climatisation,
+Automobile, Réparation électronique, Maison) servent de raccourcis, sans remplacer la
+recherche libre. Un bouton « Devenir prestataire » reste visible en bas d'écran pour
+alimenter en continu le recrutement de professionnels.
+
+A3. Traitement de la demande
+
+MVP
+
+Objectif : créer une sensation d'intelligence pendant que le moteur travaille.
+Après validation, l'application affiche successivement « Relio analyse votre demande » puis
+« Recherche du professionnel adapté », pendant que le moteur croise type de problème,
+localisation, disponibilité, compétence et réputation (voir section 7).
+
+A4. Attribution professionnelle
+
+MVP — FONCTION MAJEURE
+
+Objectif : présenter une recommandation claire et rassurante.
+
+17
+
+RELIO — Cahier des charges produit
+
+8. Périmètre fonctionnel détaillé du MVP
+
+JM
+
+Jean Mbarga
+Plombier
+
+★★★★★ 4,8
+EXPÉRIENCE
+
+DISTANCE
+
+DISPONIBILITÉ
+
+5 ans
+
+850 m
+
+Maintenant
+Confirmer
+
+Voir une autre
+proposition
+
+Figure 5 — Écran de recommandation professionnelle (exemple)
+
+Informations affichées : photo, nom, métier, note, expérience, distance, disponibilité, prix
+estimatif. Le client peut confirmer ou demander à voir une autre proposition.
+
+A5. Suivi d'intervention
+
+MVP
+
+Objectif : donner de la visibilité au client à chaque étape.
+
+Demande reçue
+
+A6. Paiement
+
+Recherche en cours
+
+Professionnel trouvé
+
+Intervention
+
+Intervention
+
+confirmée
+
+terminée
+
+MVP
+
+Objectif : formaliser la transaction. Méthodes acceptées : Mobile Money et espèces.
+Informations affichées : montant, statut du paiement, reçu.
+
+A7. Évaluation
+
+MVP
+
+Objectif : construire la réputation du réseau. Après la prestation, le client attribue une note
+(★★★★★) et un commentaire, selon trois critères : qualité, rapidité, comportement.
+
+18
+
+RELIO — Cahier des charges produit
+
+8. Périmètre fonctionnel détaillé (suite)
+
+SPÉCIFICATIONS
+
+8. Périmètre fonctionnel détaillé (suite)
+Module B — Application Prestataire
+B1. Création de compte professionnel
+
+MVP
+
+Informations demandées : nom, téléphone, métier, zone d'intervention, expérience.
+
+B2. Vérification du profil
+
+MVP
+
+Validation manuelle par l'équipe Relio, sur la base de documents possibles : pièce d'identité,
+justificatifs, références professionnelles. C'est cette étape qui construit la confiance décrite
+en section 5.2.
+
+B3. Réception des missions
+
+MVP
+
+Notification : « Nouveau travail disponible », avec le type de problème, le quartier, la
+distance et le niveau d'urgence. Le prestataire peut accepter ou refuser.
+
+B4. Gestion des missions
+
+MVP
+
+Liste organisée en trois vues : missions nouvelles, missions acceptées, missions terminées.
+
+B5. Profil professionnel et historique
+
+MVP
+
+Affichage de la note moyenne, de l'historique d'interventions, du nombre total de missions
+réalisées et du Score Relio (voir section 7.6).
+
+Module C — Dashboard Administrateur
+C1. Tableau de contrôle général
+
+MVP
+
+Indicateurs clés : demandes reçues, demandes traitées, interventions terminées, chiffre
+d'affaires, satisfaction moyenne.
+
+C2. Gestion des demandes
+
+MVP
+
+Vue reliant chaque demande au professionnel proposé et à son statut. L'administrateur
+peut modifier une attribution, contacter le client ou contacter le prestataire — c'est le filet
+de sécurité humain du MVP.
+
+19
+
+RELIO — Cahier des charges produit
+
+C3. Gestion des prestataires
+
+8. Périmètre fonctionnel détaillé (suite)
+
+MVP
+
+Fonctions : ajout, validation, suspension, modification des profils professionnels.
+
+C4. Analyse de performance
+
+MVP
+
+Indicateur
+
+Mode de calcul
+
+Temps moyen d'attribution
+
+Ex. : 15 minutes entre la demande et la
+confirmation d'un professionnel
+
+Taux de réussite
+
+Demandes terminées ÷ demandes reçues
+
+Satisfaction
+
+Note moyenne attribuée par les clients
+
+20
+
+RELIO — Cahier des charges produit
+
+9. Parcours utilisateur illustré
+
+SPÉCIFICATIONS
+
+9. Parcours utilisateur illustré
+Le parcours ci-dessous illustre comment les trois modules interagissent lors d'une
+demande réelle, du problème exprimé jusqu'à l'évaluation finale.
+1. Le client décrit son problème
+Texte ou message vocal, en moins de 60 secondes
+
+▼
+2. Le moteur Relio analyse et attribue
+Compréhension → classification → scoring → recommandation
+
+▼
+3. Le client confirme le professionnel proposé
+Ou demande une autre proposition
+
+▼
+4. Le prestataire reçoit et accepte la mission
+Notification avec urgence, distance, type de problème
+
+▼
+5. L'intervention est réalisée et suivie
+Timeline visible côté client
+
+▼
+6. Paiement puis évaluation
+Mobile Money ou espèces, puis notation ★★★★★
+
+Figure 6 — Parcours complet d'une demande, des trois interfaces au cycle de prestation
+
+Ce parcours est la traduction opérationnelle de la promesse de Relio : Problème →
+Compréhension → Attribution → Résolution. Chaque étape est volontairement courte
+pour préserver la simplicité et la rapidité définies en section 5.
+
+21
+
+RELIO — Cahier des charges produit
+
+10. Fonctionnalités volontairement exclues du MVP
+
+CADRAGE DU PÉRIMÈTRE
+
+10. Fonctionnalités volontairement exclues du
+MVP
+Afin de limiter le temps de développement et les coûts, les éléments suivants sont
+sciemment repoussés à des versions ultérieures.
+✕
+
+Chat interne entre client et prestataire
+
+✕
+
+Intelligence artificielle linguistique avancée (le MVP fonctionne par règles métier et
+validation humaine — voir section 7.9)
+
+✕
+
+Portefeuille de paiement propriétaire RelioPay
+
+✕
+
+Assurance intégrée
+
+✕
+
+Abonnement premium
+
+✕
+
+Marketplace ouverte (recherche libre parmi plusieurs prestataires)
+
+✕
+
+Géolocalisation en temps réel
+
+✕
+
+Programme de fidélité
+
+✕
+
+Publicité
+POURQUOI CETTE LISTE IMPORTE AUTANT QUE LE PÉRIMÈTRE INCLUS
+
+Chaque fonctionnalité exclue est une fonctionnalité qui aurait ralenti la mise sur le marché
+du MVP sans être indispensable pour prouver l'hypothèse centrale de Relio. Ces éléments
+réapparaissent dans la feuille de route (section 16) une fois le modèle validé.
+
+22
+
+RELIO — Cahier des charges produit
+
+11. Exigences UX / UI
+
+EXPÉRIENCE
+
+11. Exigences UX / UI
+11.1 Simplicité
+Maximum 3 clics avant la création d'une demande. Aucune étape ne doit exiger de
+l'utilisateur une connaissance technique du métier recherché.
+
+11.2 Confiance
+Présence systématique, à chaque écran pertinent, des éléments qui rassurent : profils
+vérifiés, notes visibles, statut de vérification du prestataire.
+
+11.3 Rapidité
+Une demande doit pouvoir être créée en moins de 60 secondes, de la page d'accueil
+jusqu'à la confirmation d'envoi.
+Principe
+
+Traduction concrète dans l'interface
+
+Simplicité
+
+Barre de recherche unique en page d'accueil, catégories rapides
+en raccourci, pas de formulaire long
+
+Confiance
+
+Photo, note et vérification systématiquement visibles avant la
+confirmation d'un professionnel
+
+Rapidité
+
+Saisie vocale disponible en un geste, attribution automatique
+sans étape de comparaison manuelle
+
+23
+
+RELIO — Cahier des charges produit
+
+12. Identité visuelle
+
+EXPÉRIENCE
+
+12. Identité visuelle
+12.1 Direction artistique
+Positionnement recherché : fiabilité + technologie + proximité.
+
+12.2 Palette de couleurs
+
+Bleu
+
+Jaune
+
+Blanc
+
+Confiance
+
+Action / énergie
+
+Simplicité
+
+Cette palette guide l'ensemble des interfaces : le bleu structure les écrans et porte
+l'information, le jaune signale les actions et les éléments interactifs (boutons de
+confirmation, badges de disponibilité), le blanc garantit la lisibilité et l'impression de
+simplicité recherchée en section 11.1.
+
+24
+
+RELIO — Cahier des charges produit
+
+13. Architecture technique et stack recommandée
+
+MISE EN ŒUVRE
+
+13. Architecture technique et stack
+recommandée
+La stack proposée privilégie des technologies matures, largement documentées, et
+adaptées à une équipe étudiante aux ressources limitées.
+Composant
+
+Technologie recommandée
+
+Application mobile
+
+React Native ou Flutter
+
+Backend
+
+Django + Django REST Framework
+
+Base de données
+
+PostgreSQL
+
+Stockage de fichiers
+
+Cloud Storage
+
+Notifications
+
+Firebase Cloud Messaging
+
+Dashboard
+
+React.js
+
+administrateur
+
+CORRESPONDANCE AVEC L'ARCHITECTURE FONCTIONNELLE
+
+Chaque brique technique correspond à un bloc du schéma de la Figure 1 : l'application
+mobile alimente l'API Backend (Django REST Framework), qui interroge PostgreSQL et
+déclenche le Moteur Attribution avant de notifier les prestataires via Firebase.
+
+13.1 Pourquoi ces choix pour un MVP à ressources limitées
+▸
+
+Django + PostgreSQL : écosystème mature, très documenté, permettant à une petite
+équipe de livrer rapidement une API robuste et un futur module de règles métier pour le
+moteur d'attribution.
+
+▸
+
+React Native / Flutter : une seule base de code pour Android (priorité) et, à terme, iOS.
+
+▸
+
+Firebase Cloud Messaging : notifications fiables et gratuites à faible volume,
+essentielles pour la réception des missions (fonctionnalité B3).
+
+25
+
+RELIO — Cahier des charges produit
+
+14. Critères de réussite du MVP
+
+MISE EN ŒUVRE
+
+14. Critères de réussite du MVP
+Objectifs indicatifs à trois mois après le lancement.
+
+500
+
+50
+
+300
+
+Clients inscrits
+
+Prestataires actifs
+
+Demandes traitées
+
+<30min
+
+4/5
+
+Temps moyen d'attribution
+
+Note moyenne de satisfaction
+
+Catégorie
+
+Critère de validation
+
+Acquisition
+
+Les utilisateurs téléchargent l'application et créent effectivement
+des demandes
+
+Opération
+
+Relio trouve un professionnel adapté et les interventions sont
+réellement réalisées
+
+Qualité
+
+Satisfaction supérieure à 4/5 et faible taux d'annulation
+
+26
+
+RELIO — Cahier des charges produit
+
+15. Facteurs clés de succès et points de vigilance
+
+MISE EN ŒUVRE
+
+15. Facteurs clés de succès et points de
+vigilance
+Compte tenu d'une équipe étudiante aux ressources limitées et d'un lancement en
+amorçage, quatre points de vigilance méritent une attention particulière.
+Point de vigilance
+
+Recommandation
+
+Recrutement des
+
+Le modèle ne fonctionne que si un réseau minimal de
+
+premiers
+
+professionnels vérifiés est disponible avant l'acquisition des
+
+prestataires
+
+premiers clients. Prioriser deux ou trois catégories de services (ex. :
+électricité, plomberie) plutôt que de couvrir toutes les catégories
+dès le lancement.
+
+Fiabilité perçue
+
+Tant que le moteur repose sur des règles et une validation humaine
+
+avant automatisation
+
+(section 7.9), la supervision via le Dashboard Administrateur doit
+
+complète
+
+rester réactive pour éviter toute attribution erronée qui nuirait à la
+confiance dès les premiers usages.
+
+Adoption du canal
+
+La saisie vocale étant stratégique pour l'Afrique urbaine, elle doit
+
+vocal
+
+être testée avec de vrais utilisateurs dès les premières semaines,
+et non ajoutée en fin de développement.
+
+Charge sur une
+
+Le périmètre du MVP (section 10) doit rester strictement discipliné :
+
+équipe restreinte
+
+toute fonctionnalité non listée dans les modules A, B ou C doit être
+reportée, quelle que soit sa pertinence perçue.
+
+27
+
+RELIO — Cahier des charges produit
+
+16. Feuille de route produit — V1, V2, V3
+
+TRAJECTOIRE
+
+16. Feuille de route produit — V1, V2, V3
+Le MVP n'est pas une fin en soi : c'est la première étape d'une trajectoire vers une
+infrastructure de services.
+
+MVP — V1
+
+VERSION 2
+
+VERSION 3
+
+Preuve du modèle
+
+Automatisation
+
+Infrastructure
+
+• Compréhension par règles
+
+• Paiement intégré
+
+• RelioPay (portefeuille
+
+métier
+
+• Géolocalisation en temps
+
+• Scoring et validation
+humaine
+
+réel
+
+• Assurance intégrée
+
+• Chat interne
+
+• Paiement Mobile Money /
+espèces
+• 3 interfaces (client,
+prestataire, admin)
+
+propriétaire)
+
+• Historique intelligent
+• Recommandations
+
+• Financement des
+prestataires
+• Abonnement entreprises
+
+automatiques (IA
+
+• API Relio ouverte
+
+linguistique)
+
+• Intelligence prédictive
+(Relio anticipe la panne)
+
+Figure 7 — Trajectoire d'évolution de Relio, du MVP à l'infrastructure
+
+Cette progression suit une logique simple : prouver avec la V1, automatiser avec la V2,
+puis devenir une infrastructure avec la V3 — un socle sur lequel d'autres services,
+partenaires ou entreprises pourront eux-mêmes construire.
+
+28
+
+RELIO — Cahier des charges produit
+
+17. Glossaire
+
+ANNEXES
+
+17. Glossaire
+Terme
+
+Définition
+
+Attribution
+
+Action de désigner automatiquement un professionnel pour
+répondre à une demande client, à l'issue du processus de
+matching.
+
+Cycle de prestation
+
+Ensemble des sept étapes couvertes par le MVP : expression du
+besoin, compréhension, attribution, intervention, paiement,
+évaluation.
+
+Matching
+
+Processus de mise en correspondance entre une demande client et
+les professionnels compatibles, en trois étapes (section 7.7).
+
+Moteur Relio
+
+Composant central du produit chargé de comprendre le besoin
+exprimé et d'attribuer le professionnel le plus pertinent.
+
+MVP
+
+Minimum Viable Product : version initiale du produit, suffisante pour
+valider le modèle auprès d'utilisateurs réels.
+
+Prestataire
+
+Professionnel indépendant ou petite entreprise de services
+référencé sur Relio (électricien, plombier, technicien, etc.).
+
+Score Relio
+
+Note dynamique attribuée à chaque professionnel compatible avec
+une demande, combinant compétence, disponibilité, distance,
+réputation et historique.
+
+29
+
+RELIO — Cahier des charges produit
+
+18. Conclusion
+
+SYNTHÈSE
+
+18. Conclusion
+Le MVP Relio n'est pas une application de mise en relation parmi d'autres. C'est la
+première preuve fonctionnelle d'une infrastructure plus vaste.
+La première version doit répondre à une seule question :
+
+« Est-ce que Relio peut devenir le réflexe naturel lorsqu'une personne
+rencontre un problème nécessitant une intervention humaine ? »
+Si la réponse est oui, les fonctionnalités supplémentaires listées dans la feuille de route
+deviennent des accélérateurs — jamais des fondations. Ce cahier des charges donne à
+l'équipe Relio, à ses partenaires et à ses futurs investisseurs une base commune, complète
+et actionnable pour construire cette première version.
+
+— Fin du cahier des charges produit RELIO MVP V1 —
+
+30
+
+

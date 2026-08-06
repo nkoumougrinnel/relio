@@ -6,7 +6,7 @@ Plateforme intelligente d'attribution automatisée des prestataires de services 
 
 RELIO comprend une demande exprimée en langage naturel (texte ou voix), la classifie, puis attribue automatiquement le professionnel le plus pertinent selon un score dynamique (Score Relio) combinant compétence, disponibilité, distance, réputation et historique. Le MVP cible Douala et Yaoundé (Cameroun).
 
-![logo](./docs/logo/logo_acceuil.png)
+<p align="center"><img src="./docs/logo/icone_app.png" alt="RELIO logo" width="250" style="background-color:white; padding:10px; border-radius:8px;"></p>
 
 
 ## Structure du repo
@@ -77,9 +77,9 @@ npx expo start
 ```
 
 ## Documentation
-
-La documentation produit et technique complète (cahier des charges, annexe technique, modèle de données) se trouve dans [`docs/`](./docs).
-
+La documentation produit et technique complète (cahier des charges, annexe technique, modèle de données) se trouve dans [`docs`](./docs).
+La **Product & UX Bible** (spécification fonctionnelle détaillée) est disponible dans [`docs/product_ux_bible/Product_UX_Bible.md`](./docs/product_ux_bible/Product_UX_Bible.md).
+La **Design System** (spécification de design détaillée) est disponible dans [`docs/design_system/Design_System.md`](./docs/design_system/Design_System.md).
 ## Licence
 
 Voir [LICENSE](./LICENSE).
