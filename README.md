@@ -80,6 +80,7 @@ npx expo start
 La documentation produit et technique complète (cahier des charges, annexe technique, modèle de données) se trouve dans [`docs`](./docs).
 La **Product & UX Bible** (spécification fonctionnelle détaillée) est disponible dans [`docs/product_ux_bible/Product_UX_Bible.md`](./docs/product_ux_bible/Product_UX_Bible.md).
 La **Design System** (spécification de design détaillée) est disponible dans [`docs/design_system/Design_System.md`](./docs/design_system/Design_System.md).
+Un guide `EDITING.md` expliquant comment modifier ces documents est disponible dans [`docs/EDITING.md`](./docs/EDITING.md).
 ## Licence
 
 Voir [LICENSE](./LICENSE).
