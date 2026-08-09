@@ -1,0 +1,68 @@
+name: Mobile EAS Build (Android preview)
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'apps/mobile/**'
+      - '.github/workflows/mobile-build.yml'
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'apps/mobile/**'
+  workflow_dispatch:
+
+concurrency:
+  group: mobile-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android-preview:
+    name: Build Android (preview)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/mobile
+        run: npm ci
+
+      - name: Install EAS CLI globally
+        run: npm install -g eas-cli@^21.7.0
+
+      - name: Lint (warning only)
+        working-directory: apps/mobile
+        run: npm run lint || echo "::warning::Lint warnings — non bloquant"
+        continue-on-error: true
+
+      - name: Run EAS Build (Android, preview)
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx eas build --platform android --profile preview --non-interactive
+
+      - name: Build summary
+        if: always()
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          echo "## 📱 Build Android preview" >> $GITHUB_STEP_SUMMARY
+          echo "Profil : \`preview\` (distribution interne)" >> $GITHUB_STEP_SUMMARY
+          echo "Branche : \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Récupère l'APK sur le dashboard EAS :" >> $GITHUB_STEP_SUMMARY
+          echo "https://expo.dev/accounts/${{ github.actor }}/projects/relio-mobile/builds" >> $GITHUB_STEP_SUMMARY
