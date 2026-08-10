@@ -2,6 +2,7 @@
   "expo": {
     "name": "Relio",
     "slug": "relio",
+    "owner": "relios-team",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -47,7 +48,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "db514daf-ef94-4280-82ed-fbb3bcb5d715"
+        "projectId": "739ebf83-dfe2-4e52-a243-0bc9528c071c"
       }
     }
   }

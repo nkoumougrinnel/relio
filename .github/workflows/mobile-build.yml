@@ -65,4 +65,4 @@ jobs:
           echo "Branche : \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Récupère l'APK sur le dashboard EAS :" >> $GITHUB_STEP_SUMMARY
-          echo "https://expo.dev/accounts/${{ github.actor }}/projects/relio-mobile/builds" >> $GITHUB_STEP_SUMMARY
+          echo "https://expo.dev/accounts/${{ github.actor }}/projects/relio/builds" >> $GITHUB_STEP_SUMMARY
