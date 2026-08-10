@@ -1,14 +1,15 @@
 {
-  "name": "mobile",
+  "name": "relio-mobile",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "mock-api": "json-server --watch mocks/db.json --routes mocks/routes.json --middlewares mocks/middlewares/delay.js mocks/middlewares/errors.js mocks/middlewares/auth.js --port 3001",
+    "mock-api:no-auth": "json-server --watch mocks/db.json --routes mocks/routes.json --middlewares mocks/middlewares/delay.js --port 3001"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -31,17 +32,18 @@
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-gesture-handler": "~2.28.0",
-    "react-native-worklets": "0.5.1",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
-    "react-native-web": "~0.21.0"
+    "react-native-web": "~0.21.0",
+    "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
-    "typescript": "~5.9.2",
     "eslint": "^9.25.0",
-    "eslint-config-expo": "~10.0.0"
+    "eslint-config-expo": "~10.0.0",
+    "json-server": "^0.17.4",
+    "typescript": "~5.9.2"
   },
   "private": true
 }
