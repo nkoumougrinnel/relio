@@ -3,42 +3,58 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
-  Dimensions,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, spacing, borderRadius } from '../../theme';
-
-const { width } = Dimensions.get('window');
+import { Feather, Ionicons } from '@expo/vector-icons';
 
 export default function RegisterScreen() {
   const router = useRouter();
 
-  const [nom, setNom] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [telephone, setTelephone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegister = () => {
-    // Redirection unique vers l'application
-    router.replace('/(client)/tabs' as any);
-  };
+  // Checkboxes state
+  const [cguAccepted, setCguAccepted] = useState(true);
+  const [privacyAccepted, setPrivacyAccepted] = useState(true);
 
-  const handleGoogleRegister = () => {
-    router.replace('/(client)/tabs' as any);
+  const handleContinue = () => {
+    // Navigation vers la vérification OTP
+    router.push('/(auth)/verify' as any);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
+      {/* Header : Retour + Titre */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => router.back()}
+          activeOpacity={0.7}
+        >
+          <Feather name="arrow-left" size={24} color={colors.grayVeryDark} />
+        </TouchableOpacity>
+        
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.title}>Créer mon compte</Text>
+        </View>
+        
+        {/* Un View vide pour équilibrer le header avec la flèche */}
+        <View style={{ width: 40 }} />
+      </View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -48,80 +64,62 @@ export default function RegisterScreen() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Header */}
-          <View style={styles.header}>
-            <Image
-              source={require('../../assets/images/logo-horizontal.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-          </View>
-
-          {/* Titres */}
-          <View style={styles.titleSection}>
-            <Text style={styles.title}>Créer un compte</Text>
-            <Text style={styles.subtitle}>
-              Rejoignez Relio en quelques secondes et accédez à l'ensemble de nos services.
-            </Text>
-          </View>
-
-          {/* Bouton Continuer avec Google */}
-          <TouchableOpacity
-            style={styles.googleBtn}
-            activeOpacity={0.85}
-            onPress={handleGoogleRegister}
-          >
-            <View style={styles.googleIconCircle}>
-              <Text style={styles.googleGText}>G</Text>
-            </View>
-            <Text style={styles.googleBtnText}>S'inscrire avec Google</Text>
-          </TouchableOpacity>
-
-          {/* Séparateur */}
-          <View style={styles.dividerContainer}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>ou avec votre e-mail</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          {/* Formulaire unique Relio */}
+          {/* Formulaire */}
           <View style={styles.form}>
-            {/* Nom complet */}
+            {/* Prénom */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Nom complet</Text>
+              <Text style={styles.label}>Prénom</Text>
               <TextInput
                 style={styles.input}
-                placeholder="ex. Alice Moreau"
+                placeholder="Jean"
                 placeholderTextColor={colors.placeholder}
-                value={nom}
-                onChangeText={setNom}
+                value={firstName}
+                onChangeText={setFirstName}
               />
             </View>
 
-            {/* Email */}
+            {/* Nom */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Adresse e-mail</Text>
+              <Text style={styles.label}>Nom</Text>
               <TextInput
                 style={styles.input}
-                placeholder="alice.moreau@email.com"
+                placeholder="Dupont"
                 placeholderTextColor={colors.placeholder}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
+                value={lastName}
+                onChangeText={setLastName}
               />
             </View>
 
             {/* Téléphone */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Numéro de téléphone</Text>
+              <Text style={styles.label}>Téléphone</Text>
+              <View style={styles.phoneInputContainer}>
+                <View style={styles.countryCode}>
+                  <Text style={styles.countryEmoji}>🇨🇲</Text>
+                  <Text style={styles.countryPrefix}>+237</Text>
+                </View>
+                <TextInput
+                  style={[styles.input, styles.phoneInput]}
+                  placeholder="6 95 12 34 56"
+                  placeholderTextColor={colors.placeholder}
+                  value={phone}
+                  onChangeText={setPhone}
+                  keyboardType="phone-pad"
+                />
+              </View>
+            </View>
+
+            {/* Email */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="+33 6 12 34 56 78"
+                placeholder="jean.dupont@email.com"
                 placeholderTextColor={colors.placeholder}
-                value={telephone}
-                onChangeText={setTelephone}
-                keyboardType="phone-pad"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
             </View>
 
@@ -141,30 +139,55 @@ export default function RegisterScreen() {
                   style={styles.eyeBtn}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Text style={styles.eyeIcon}>
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                  </Text>
+                  <Feather
+                    name={showPassword ? 'eye-off' : 'eye'}
+                    size={20}
+                    color={colors.grayDark}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
+          </View>
 
-            {/* Bouton Inscription */}
-            <TouchableOpacity
-              style={styles.submitBtn}
-              activeOpacity={0.88}
-              onPress={handleRegister}
+          {/* Conditions */}
+          <View style={styles.conditionsBlock}>
+            {/* CGU */}
+            <TouchableOpacity 
+              style={styles.checkboxRow} 
+              activeOpacity={0.8}
+              onPress={() => setCguAccepted(!cguAccepted)}
             >
-              <Text style={styles.submitBtnText}>Créer mon compte</Text>
+              <View style={[styles.checkbox, cguAccepted && styles.checkboxActive]}>
+                {cguAccepted && <Feather name="check" size={14} color={colors.white} />}
+              </View>
+              <Text style={styles.checkboxText}>
+                J'accepte les <Text style={styles.linkText}>Conditions Générales d'Utilisation</Text>
+              </Text>
+            </TouchableOpacity>
+
+            {/* Politique */}
+            <TouchableOpacity 
+              style={styles.checkboxRow} 
+              activeOpacity={0.8}
+              onPress={() => setPrivacyAccepted(!privacyAccepted)}
+            >
+              <View style={[styles.checkbox, privacyAccepted && styles.checkboxActive]}>
+                {privacyAccepted && <Feather name="check" size={14} color={colors.white} />}
+              </View>
+              <Text style={styles.checkboxText}>
+                J'accepte la <Text style={styles.linkText}>Politique de confidentialité</Text>
+              </Text>
             </TouchableOpacity>
           </View>
 
-          {/* Bas de page : Déjà un compte */}
-          <View style={styles.footerLinkContainer}>
-            <Text style={styles.footerLinkText}>Vous avez déjà un compte ? </Text>
-            <TouchableOpacity onPress={() => router.push('/(auth)' as any)}>
-              <Text style={styles.footerLinkBold}>Se connecter</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Bouton Continuer */}
+          <TouchableOpacity
+            style={styles.submitBtn}
+            activeOpacity={0.88}
+            onPress={handleContinue}
+          >
+            <Text style={styles.submitBtnText}>Continuer</Text>
+          </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -174,99 +197,46 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background, // fond blanc
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.lg,
+  },
+  backBtn: {
+    padding: spacing.xs,
+    width: 40,
+  },
+  headerTitleContainer: {
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.grayVeryDark,
+  },
+  subtitle: {
+    fontSize: 13,
+    color: colors.grayDark,
+    marginTop: 2,
   },
   keyboardView: {
     flex: 1,
   },
   scrollContent: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
     paddingBottom: spacing.xl,
   },
-  header: {
-    alignItems: 'center',
-    marginBottom: spacing.md,
-  },
-  logo: {
-    width: width * 0.5,
-    height: 60,
-  },
-  titleSection: {
-    marginBottom: spacing.md,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: colors.grayVeryDark,
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: colors.grayDark,
-    lineHeight: 20,
-  },
-
-  /* Google Button */
-  googleBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.white,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    paddingVertical: 14,
-    borderRadius: borderRadius.md,
-    gap: spacing.sm,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  googleIconCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#4285F4',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  googleGText: {
-    color: colors.white,
-    fontWeight: '900',
-    fontSize: 14,
-  },
-  googleBtnText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.grayVeryDark,
-  },
-
-  /* Divider */
-  dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: spacing.lg,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  dividerText: {
-    marginHorizontal: spacing.md,
-    fontSize: 13,
-    color: colors.grayMedium,
-    fontWeight: '500',
-  },
-
-  /* Form */
   form: {
-    gap: spacing.md,
+    gap: spacing.lg,
+    marginBottom: spacing.xl,
   },
   inputGroup: {
-    gap: 6,
+    gap: 8,
   },
   label: {
     fontSize: 14,
@@ -274,7 +244,7 @@ const styles = StyleSheet.create({
     color: colors.grayVeryDark,
   },
   input: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: borderRadius.md,
@@ -282,6 +252,33 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     fontSize: 15,
     color: colors.grayVeryDark,
+  },
+  phoneInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  countryCode: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 14,
+    gap: 4,
+  },
+  countryEmoji: {
+    fontSize: 16,
+  },
+  countryPrefix: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: colors.grayVeryDark,
+  },
+  phoneInput: {
+    flex: 1,
   },
   passwordInputWrapper: {
     position: 'relative',
@@ -295,18 +292,50 @@ const styles = StyleSheet.create({
     right: 14,
     padding: 4,
   },
-  eyeIcon: {
-    fontSize: 18,
+  
+  /* Checkboxes */
+  conditionsBlock: {
+    gap: spacing.md,
+    marginBottom: spacing.xl,
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+    paddingRight: spacing.md,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 1, // alignement optique
+  },
+  checkboxActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  checkboxText: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.grayVeryDark,
+    lineHeight: 20,
+  },
+  linkText: {
+    color: colors.primary,
+    fontWeight: '600',
   },
 
-  /* Submit Button */
+  /* Bouton */
   submitBtn: {
     backgroundColor: colors.primary,
-    paddingVertical: 16,
+    height: 48, // hauteur demandée
     borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.sm,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -317,22 +346,5 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 17,
     fontWeight: '700',
-  },
-
-  /* Footer Link */
-  footerLinkContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: spacing.xl,
-  },
-  footerLinkText: {
-    fontSize: 14,
-    color: colors.grayDark,
-  },
-  footerLinkBold: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.primary,
   },
 });

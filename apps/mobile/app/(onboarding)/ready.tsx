@@ -22,7 +22,7 @@ export default function ReadyScreen() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
       <View style={styles.content}>
-        {/* Header : Logo Horizontal */}
+        {/* En-tête : Logo Horizontal à gauche */}
         <View style={styles.header}>
           <Image
             source={require('../../assets/images/logo-horizontal.png')}
@@ -31,44 +31,20 @@ export default function ReadyScreen() {
           />
         </View>
 
-        {/* Bloc central "Vous y êtes !" */}
-        <View style={styles.centerBlock}>
-          {/* Badge Succès Certifié */}
-          <View style={styles.successBadgeCircle}>
-            <Text style={styles.checkmarkIcon}>✓</Text>
+        {/* Bloc central avec Illustration et Titre */}
+        <View style={styles.mainSection}>
+          <View style={styles.illustrationContainer}>
+            <Image
+              source={require('../../assets/images/ready.png')}
+              style={styles.illustrationImage}
+              resizeMode="contain"
+            />
           </View>
 
-          <Text style={styles.title}>Prêt à commencer !</Text>
-          <Text style={styles.subtitle}>
-            Créez votre compte en quelques secondes pour accéder à tous les services de proximité et professionnels certifiés.
-          </Text>
-
-          {/* Cartes d'Avantages / Confirmation */}
-          <View style={styles.featuresContainer}>
-            <View style={styles.featureRow}>
-              <View style={styles.bulletCheck}>
-                <Text style={styles.bulletCheckText}>✓</Text>
-              </View>
-              <Text style={styles.featureText}>Recherche vocale & textuelle active</Text>
-            </View>
-
-            <View style={styles.featureRow}>
-              <View style={styles.bulletCheck}>
-                <Text style={styles.bulletCheckText}>✓</Text>
-              </View>
-              <Text style={styles.featureText}>Prestataires vérifiés dans votre zone</Text>
-            </View>
-
-            <View style={styles.featureRow}>
-              <View style={styles.bulletCheck}>
-                <Text style={styles.bulletCheckText}>✓</Text>
-              </View>
-              <Text style={styles.featureText}>Paiement sécurisé & devis transparents</Text>
-            </View>
-          </View>
+          <Text style={styles.title}>Prêt à simplifier{'\n'}votre quotidien ?</Text>
         </View>
 
-        {/* Actions : Créer un compte & J'ai déjà un compte */}
+        {/* Actions en bas */}
         <View style={styles.actionsBlock}>
           {/* Bouton Créer un compte */}
           <TouchableOpacity
@@ -85,7 +61,7 @@ export default function ReadyScreen() {
             activeOpacity={0.88}
             onPress={() => router.push('/(auth)' as any)}
           >
-            <Text style={styles.btnSecondaryText}>J'ai déjà un compte</Text>
+            <Text style={styles.btnSecondaryText}>J’ai déjà un compte</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -101,98 +77,48 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
     paddingBottom: spacing.lg,
   },
   header: {
-    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    alignItems: 'flex-start',
   },
   logo: {
-    width: width * 0.5,
-    height: 60,
+    width: 140,
+    height: 45,
   },
 
-  /* Center Block */
-  centerBlock: {
-    alignItems: 'center',
+  /* Section Centrale */
+  mainSection: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
   },
-  successBadgeCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#E8F8F0',
-    borderWidth: 2,
-    borderColor: colors.success,
+  illustrationContainer: {
+    width: width * 0.8,
+    aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.md,
-    shadowColor: colors.success,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 4,
+    marginBottom: spacing.xl,
   },
-  checkmarkIcon: {
-    fontSize: 40,
-    color: colors.success,
-    fontWeight: '800',
+  illustrationImage: {
+    width: '100%',
+    height: '100%',
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '800',
-    color: colors.grayVeryDark,
+    color: colors.primary, // Texte bleu comme demandé ("bleu foncé") ou primary
     textAlign: 'center',
-    marginBottom: spacing.xs,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: colors.grayDark,
-    textAlign: 'center',
-    lineHeight: 21,
-    maxWidth: '90%',
-    marginBottom: spacing.lg,
-  },
-
-  /* Features List */
-  featuresContainer: {
-    width: '100%',
-    backgroundColor: '#FAFAFA',
-    padding: spacing.md,
-    borderRadius: borderRadius.md,
-    gap: spacing.sm,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  bulletCheck: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: colors.success,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bulletCheckText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: '800',
-  },
-  featureText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.grayVeryDark,
+    lineHeight: 36,
   },
 
   /* Actions */
   actionsBlock: {
     width: '100%',
+    paddingHorizontal: spacing.lg,
     gap: spacing.sm,
   },
   btnPrimary: {
@@ -213,8 +139,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   btnSecondary: {
-    backgroundColor: 'transparent',
-    paddingVertical: 14,
+    backgroundColor: colors.background,
+    paddingVertical: 16,
     borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
@@ -222,8 +148,8 @@ const styles = StyleSheet.create({
     borderColor: colors.grayLight,
   },
   btnSecondaryText: {
-    color: colors.grayVeryDark,
-    fontSize: 16,
-    fontWeight: '600',
+    color: colors.primary,
+    fontSize: 17,
+    fontWeight: '700',
   },
 });

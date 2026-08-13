@@ -15,6 +15,7 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, spacing, borderRadius } from '../../theme';
+import { Feather } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -27,12 +28,12 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     // Redirection vers le dashboard client après connexion
-    router.replace('/(client)/tabs' as any);
+    router.replace('/(client)/(tabs)' as any);
   };
 
   const handleGoogleLogin = () => {
-    // Logique auth Google (mock/fire-and-forget pour dev)
-    router.replace('/(client)/tabs' as any);
+    // Logique auth Google
+    router.replace('/(client)/(tabs)' as any);
   };
 
   return (
@@ -56,41 +57,22 @@ export default function LoginScreen() {
             />
           </View>
 
-          {/* Titres */}
+          {/* Titre & Introduction */}
           <View style={styles.titleSection}>
             <Text style={styles.title}>Connexion</Text>
             <Text style={styles.subtitle}>
-              Renseignez vos identifiants pour accéder à votre espace Relio
+              Connectez-vous pour accéder à votre espace Relio.
             </Text>
-          </View>
-
-          {/* Bouton Continuer avec Google */}
-          <TouchableOpacity
-            style={styles.googleBtn}
-            activeOpacity={0.85}
-            onPress={handleGoogleLogin}
-          >
-            <View style={styles.googleIconCircle}>
-              <Text style={styles.googleGText}>G</Text>
-            </View>
-            <Text style={styles.googleBtnText}>Continuer avec Google</Text>
-          </TouchableOpacity>
-
-          {/* Séparateur */}
-          <View style={styles.dividerContainer}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>ou avec votre e-mail</Text>
-            <View style={styles.dividerLine} />
           </View>
 
           {/* Formulaire */}
           <View style={styles.form}>
-            {/* Champ Email / Téléphone */}
+            {/* Champ Email ou téléphone */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Adresse e-mail ou téléphone</Text>
+              <Text style={styles.label}>Email ou téléphone</Text>
               <TextInput
                 style={styles.input}
-                placeholder="ex. alice.moreau@email.com"
+                placeholder="jean.dupont@email.com"
                 placeholderTextColor={colors.placeholder}
                 value={email}
                 onChangeText={setEmail}
@@ -101,12 +83,7 @@ export default function LoginScreen() {
 
             {/* Champ Mot de passe */}
             <View style={styles.inputGroup}>
-              <View style={styles.labelRow}>
-                <Text style={styles.label}>Mot de passe</Text>
-                <TouchableOpacity activeOpacity={0.7}>
-                  <Text style={styles.forgotText}>Mot de passe oublié ?</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.label}>Mot de passe</Text>
               <View style={styles.passwordInputWrapper}>
                 <TextInput
                   style={[styles.input, styles.passwordInput]}
@@ -120,11 +97,17 @@ export default function LoginScreen() {
                   style={styles.eyeBtn}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Text style={styles.eyeIcon}>
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                  </Text>
+                  <Feather 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={20} 
+                    color={colors.grayDark} 
+                  />
                 </TouchableOpacity>
               </View>
+              {/* Mot de passe oublié ? */}
+              <TouchableOpacity activeOpacity={0.7} style={styles.forgotBtn}>
+                <Text style={styles.forgotText}>Mot de passe oublié ?</Text>
+              </TouchableOpacity>
             </View>
 
             {/* Bouton Se connecter */}
@@ -136,6 +119,25 @@ export default function LoginScreen() {
               <Text style={styles.submitBtnText}>Se connecter</Text>
             </TouchableOpacity>
           </View>
+
+          {/* Séparateur */}
+          <View style={styles.dividerContainer}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>ou</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          {/* Bouton Continuer avec Google */}
+          <TouchableOpacity
+            style={styles.googleBtn}
+            activeOpacity={0.85}
+            onPress={handleGoogleLogin}
+          >
+            <View style={styles.googleIconCircle}>
+              <Text style={styles.googleGText}>G</Text>
+            </View>
+            <Text style={styles.googleBtnText}>Continuer avec Google</Text>
+          </TouchableOpacity>
 
           {/* Bas de page : Lien vers création de compte */}
           <View style={styles.footerLinkContainer}>
@@ -168,106 +170,40 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xl,
   },
   header: {
-    alignItems: 'center',
-    marginBottom: spacing.md,
+    alignItems: 'flex-start',
+    marginBottom: spacing.xl,
   },
   logo: {
-    width: width * 0.5,
-    height: 60,
+    width: 140,
+    height: 45,
   },
   titleSection: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xl,
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '800',
     color: colors.grayVeryDark,
-    marginBottom: 4,
+    marginBottom: spacing.xs,
   },
   subtitle: {
-    fontSize: 14,
-    color: colors.grayDark,
-    lineHeight: 20,
-  },
-
-  /* Google Button */
-  googleBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.white,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    paddingVertical: 14,
-    borderRadius: borderRadius.md,
-    gap: spacing.sm,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  googleIconCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#4285F4',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  googleGText: {
-    color: colors.white,
-    fontWeight: '900',
-    fontSize: 14,
-  },
-  googleBtnText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: colors.grayVeryDark,
+    color: colors.grayDark,
+    lineHeight: 24,
   },
-
-  /* Divider */
-  dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: spacing.lg,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  dividerText: {
-    marginHorizontal: spacing.md,
-    fontSize: 13,
-    color: colors.grayMedium,
-    fontWeight: '500',
-  },
-
-  /* Form */
   form: {
-    gap: spacing.md,
+    gap: spacing.lg,
   },
   inputGroup: {
-    gap: 6,
-  },
-  labelRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    gap: 8,
   },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: colors.grayVeryDark,
   },
-  forgotText: {
-    fontSize: 13,
-    color: colors.primary,
-    fontWeight: '600',
-  },
   input: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: borderRadius.md,
@@ -288,18 +224,22 @@ const styles = StyleSheet.create({
     right: 14,
     padding: 4,
   },
-  eyeIcon: {
-    fontSize: 18,
+  forgotBtn: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
-
-  /* Submit Button */
+  forgotText: {
+    fontSize: 14,
+    color: colors.primary,
+    fontWeight: '600',
+  },
   submitBtn: {
     backgroundColor: colors.primary,
     paddingVertical: 16,
     borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.sm,
+    marginTop: spacing.md,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -311,8 +251,51 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
   },
-
-  /* Footer Link */
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: spacing.xl,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    marginHorizontal: spacing.md,
+    fontSize: 14,
+    color: colors.grayMedium,
+    fontWeight: '500',
+  },
+  googleBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    paddingVertical: 14,
+    borderRadius: borderRadius.md,
+    gap: spacing.sm,
+  },
+  googleIconCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#4285F4',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  googleGText: {
+    color: colors.white,
+    fontWeight: '900',
+    fontSize: 14,
+  },
+  googleBtnText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.grayVeryDark,
+  },
   footerLinkContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

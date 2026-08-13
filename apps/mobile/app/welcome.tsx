@@ -31,21 +31,28 @@ export default function WelcomeScreen() {
           />
         </View>
 
-        {/* Message de Bienvenue & Section Centrale */}
-        <View style={styles.mainSection}>
-          <Text style={styles.welcomeTitle}>Bienvenue</Text>
+        {/* Textes de Bienvenue */}
+        <View style={styles.textSection}>
+          <Text style={styles.welcomeTitle}>Bienvenue sur Relio 👋</Text>
           <Text style={styles.welcomeSubtitle}>
-            Trouvez les meilleurs prestataires de service qualifiés près de chez vous en quelques clics.
+            Trouvez rapidement le bon professionnel pour tous vos besoins.
           </Text>
+        </View>
 
-          {/* Placeholder Illustration Bonhomme */}
+        {/* Illustration au Centre */}
+        <View style={styles.mainSection}>
           <View style={styles.illustrationContainer}>
-            <View style={styles.illustrationPlaceholder}>
-              {/* Icône / Motif temporaire en attendant l'image du bonhomme */}
-              <View style={styles.characterHead} />
-              <View style={styles.characterBody} />
-              <Text style={styles.illustrationText}>[ Image Bonhomme ]</Text>
+            {/* Éléments décoratifs (nuage bleu pâle) */}
+            <View style={styles.cloudBackground}>
+              <View style={styles.cloudPart1} />
+              <View style={styles.cloudPart2} />
+              <View style={styles.cloudPart3} />
             </View>
+            <Image 
+              source={require('../assets/images/welcome-illustration.png')}
+              style={styles.illustrationImage}
+              resizeMode="contain"
+            />
           </View>
         </View>
 
@@ -87,77 +94,85 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.lg,
   },
   header: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: spacing.xs,
   },
   logoHorizontal: {
-    width: width * 0.55,
-    height: 70,
+    width: 160,
+    height: 150,
   },
 
-  /* Section Centrale */
-  mainSection: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
+  /* Textes de Bienvenue */
+  textSection: {
+    marginTop: spacing.sm,
+    alignItems: 'flex-start',
   },
   welcomeTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: colors.grayVeryDark,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: spacing.xs,
   },
   welcomeSubtitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '400',
     color: colors.grayDark,
-    textAlign: 'center',
-    lineHeight: 22,
-    maxWidth: '85%',
-    marginBottom: spacing.lg,
+    textAlign: 'left',
+    lineHeight: 24,
   },
 
-  /* Illustration Bonhomme Placeholder */
+  /* Section Centrale & Illustration */
+  mainSection: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   illustrationContainer: {
-    width: width * 0.7,
-    height: width * 0.6,
+    width: width * 0.85,
+    aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: spacing.md,
+    position: 'relative',
   },
-  illustrationPlaceholder: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#F2F6FF',
-    borderRadius: borderRadius.lg,
-    borderWidth: 2,
-    borderColor: '#D4E4FF',
-    borderStyle: 'dashed',
+  cloudBackground: {
+    position: 'absolute',
+    width: '95%',
+    height: '95%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  characterHead: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.primary,
-    marginBottom: 8,
-    opacity: 0.8,
+  cloudPart1: {
+    position: 'absolute',
+    width: '90%',
+    height: '45%',
+    backgroundColor: '#EBF3FF',
+    borderRadius: 200,
+    bottom: '15%',
   },
-  characterBody: {
-    width: 80,
-    height: 40,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: colors.secondary,
-    opacity: 0.8,
+  cloudPart2: {
+    position: 'absolute',
+    width: '55%',
+    height: '55%',
+    backgroundColor: '#EBF3FF',
+    borderRadius: 200,
+    bottom: '35%',
+    left: '12%',
   },
-  illustrationText: {
-    marginTop: spacing.md,
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.primary,
+  cloudPart3: {
+    position: 'absolute',
+    width: '45%',
+    height: '45%',
+    backgroundColor: '#EBF3FF',
+    borderRadius: 200,
+    bottom: '30%',
+    right: '15%',
+  },
+  illustrationImage: {
+    width: '100%',
+    height: '100%',
+    zIndex: 1,
   },
 
   /* Actions */

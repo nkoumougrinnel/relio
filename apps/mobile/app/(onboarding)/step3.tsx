@@ -15,11 +15,12 @@ import { Feather } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
-export default function OnboardingScreen() {
+export default function OnboardingStep3Screen() {
   const router = useRouter();
 
   const handleNext = () => {
-    router.push('/(onboarding)/step2' as any);
+    // Navigue vers la dernière étape (ready) ou l'authentification
+    router.push('/(onboarding)/ready' as any);
   };
 
   return (
@@ -29,64 +30,60 @@ export default function OnboardingScreen() {
       <View style={styles.content}>
         {/* En-tête : Titre & Sous-titre (Pas de logo) */}
         <View style={styles.header}>
-          <Text style={styles.title}>Décrivez votre problème</Text>
+          <Text style={styles.title}>Le bon professionnel intervient</Text>
           <Text style={styles.subtitle}>
-            Expliquez votre besoin par texte, photo ou message vocal.{'\n'}
-            Relio comprend automatiquement votre demande.
+            Suivez votre intervention en temps réel, échangez avec le professionnel et évaluez la prestation.
           </Text>
         </View>
 
         {/* Illustration principale */}
         <View style={styles.mainSection}>
-          <View style={styles.illustrationRow}>
-            {/* Décoration nuage / cercle pour l'image */}
-            <View style={styles.illustrationWrapper}>
-              <View style={styles.cloudBackground}>
-                <View style={styles.cloudPart1} />
-                <View style={styles.cloudPart2} />
-                <View style={styles.cloudPart3} />
-              </View>
-              <Image
-                source={require('../../assets/images/onboarding-1.png')}
-                style={styles.illustrationImage}
-                resizeMode="contain"
-              />
+          <View style={styles.illustrationWrapper}>
+            <View style={styles.cloudBackground}>
+              <View style={styles.cloudPart1} />
+              <View style={styles.cloudPart2} />
+              <View style={styles.cloudPart3} />
             </View>
-              {/* Floating actions removed per design */}
+            <Image
+              source={require('../../assets/images/onboarding-3.png')}
+              style={styles.illustrationImage}
+              resizeMode="contain"
+            />
           </View>
 
-          {/* Les 3 options en bas de l'illustration */}
+          {/* Les 3 options en bas de l'illustration (non cliquables) */}
           <View style={styles.optionsRow}>
             <View style={styles.optionItem}>
               <View style={styles.optionCircle}>
-                <Feather name="file-text" size={24} color={colors.primary} />
+                <Feather name="shield" size={24} color={colors.primary} />
               </View>
-              <Text style={styles.optionLabel}>Texte</Text>
+              <Text style={styles.optionLabel}>Paiement</Text>
+              <Text style={styles.optionLabel}>sécurisé</Text>
             </View>
 
             <View style={styles.optionItem}>
               <View style={styles.optionCircle}>
-                <Feather name="camera" size={24} color={colors.primary} />
+                <Feather name="life-buoy" size={24} color={colors.primary} />
               </View>
-              <Text style={styles.optionLabel}>Photo</Text>
+              <Text style={styles.optionLabel}>Support</Text>
             </View>
 
             <View style={styles.optionItem}>
               <View style={styles.optionCircle}>
-                <Feather name="mic" size={24} color={colors.primary} />
+                <Feather name="star" size={24} color={colors.primary} />
               </View>
-              <Text style={styles.optionLabel}>Voix</Text>
+              <Text style={styles.optionLabel}>Évaluation</Text>
             </View>
           </View>
         </View>
 
         {/* Footer : Indicateurs de page & Bouton Suivant */}
         <View style={styles.footer}>
-          {/* Puces de pagination (3 dots, 1er actif) */}
+          {/* Puces de pagination (3 dots, 3ème actif) */}
           <View style={styles.pagination}>
+            <View style={[styles.dot, styles.inactiveDot]} />
+            <View style={[styles.dot, styles.inactiveDot]} />
             <View style={[styles.dot, styles.activeDot]} />
-            <View style={[styles.dot, styles.inactiveDot]} />
-            <View style={[styles.dot, styles.inactiveDot]} />
           </View>
 
           {/* Bouton Suivant */}
@@ -136,20 +133,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
   },
-  illustrationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    marginBottom: spacing.xl,
-  },
   illustrationWrapper: {
-    width: width * 0.8,
+    width: width * 0.75,
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    marginRight: 0,
+    marginBottom: spacing.xl,
   },
   cloudBackground: {
     position: 'absolute',
@@ -189,11 +179,10 @@ const styles = StyleSheet.create({
     height: '100%',
     zIndex: 1,
   },
-  /* floatingActions and actionIcon removed */
   optionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     width: '90%',
     marginTop: spacing.md,
   },
@@ -205,15 +194,16 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#EBF3FF',
+    backgroundColor: '#EBF3FF', // light blue circle
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
   optionLabel: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
     color: colors.grayVeryDark,
+    textAlign: 'center',
   },
   footer: {
     paddingHorizontal: spacing.lg,

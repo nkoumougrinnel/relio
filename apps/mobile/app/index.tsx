@@ -15,7 +15,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { colors, spacing } from '../theme';
 
 const { width } = Dimensions.get('window');
-const DISPLAY_DURATION = 2000; // 2 secondes avant redirection
+const DISPLAY_DURATION = 3000; // 3 secondes avant redirection
 
 export default function AnimatedSplashScreen() {
   const router = useRouter();
@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   logoHorizontal: {
-    width: width * 0.75,
-    height: 110,
+    width: width * 0.95,
+    height: 150,
   },
   tagline: {
     marginTop: spacing.md,
