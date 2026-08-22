@@ -1,35 +1,35 @@
 /**
  * Design System Relio — Tokens de couleur
- * Directement extrait des spécifications de la charte visuelle (docs/design_system/03_Couleurs.md)
+ * Directement extrait des spécifications actuelles de la charte visuelle.
  */
 export const colors = {
   // Couleurs principales
-  primary: '#0053F3',          // Bleu primaire (Marque, boutons principaux)
-  secondary: '#FFB300',        // Jaune accent (Boutons d'action secondaire, surlignages)
-  success: '#30B26C',          // Vert succès (Validations, check-lists)
-  error: '#D32F2F',            // Rouge erreur (Alertes, messages d'erreur)
-  warning: '#FFA000',          // Amber warning (Badges, avertissements)
-  info: '#0288D1',             // Bleu info (Aide, informations)
+  primary: '#0053F3',
+  secondary: '#FFB300',
+  success: '#30B26C',
+  error: '#D32F2F',
+  warning: '#FFA000',
+  info: '#0288D1',
 
   // Arrière-plans et surfaces
-  background: '#FFFFFF',       // Fond principal
-  surface: '#FAFAFA',          // Fond de carte / surface légère
-  surfaceVariant: '#E0E0E0',   // Surface surélevée ou bordure légère
-  backgroundInverse: '#212121',// Fond sombre
+  background: '#FFFFFF',
+  surface: '#FAFAFA',
+  surfaceVariant: '#E0E0E0',
+  backgroundInverse: '#212121',
 
   // Textes
-  onBackground: '#212121',     // Texte principal sur fond clair
-  onSurface: '#212121',        // Texte sur carte / surface
-  onSurfaceVariant: '#424242', // Texte secondaire
-  onPrimary: '#FFFFFF',        // Texte sur bouton bleu
-  onSecondary: '#212121',      // Texte sur bouton jaune
-  disabled: '#BDBDBD',         // Texte/élément désactivé
-  placeholder: '#9E9E9E',      // Placeholder dans les inputs
+  onBackground: '#212121',
+  onSurface: '#212121',
+  onSurfaceVariant: '#424242',
+  onPrimary: '#FFFFFF',
+  onSecondary: '#212121',
+  disabled: '#BDBDBD',
+  placeholder: '#9E9E9E',
 
   // Bordures
-  border: '#E0E0E0',           // Bordures par défaut
-  borderVariant: '#BDBDBD',    // Bordures accentuées
-  inverseBorder: '#424242',    // Bordures sur fond sombre
+  border: '#E0E0E0',
+  borderVariant: '#BDBDBD',
+  inverseBorder: '#424242',
 
   // Neutres supplémentaires
   white: '#FFFFFF',

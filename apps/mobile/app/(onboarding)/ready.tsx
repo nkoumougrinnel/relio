@@ -4,13 +4,13 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   Dimensions,
   StatusBar,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, spacing, borderRadius } from '../../theme';
+import { colors, spacing } from '../../theme';
+import { Button } from '../../components/ui';
 
 const { width } = Dimensions.get('window');
 
@@ -22,7 +22,7 @@ export default function ReadyScreen() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
       <View style={styles.content}>
-        {/* En-tête : Logo Horizontal à gauche */}
+        {/* En-tête : Logo Horizontal */}
         <View style={styles.header}>
           <Image
             source={require('../../assets/images/logo-horizontal.png')}
@@ -35,7 +35,7 @@ export default function ReadyScreen() {
         <View style={styles.mainSection}>
           <View style={styles.illustrationContainer}>
             <Image
-              source={require('../../assets/images/ready.png')}
+              source={require('./assets/illustration-ready.png')}
               style={styles.illustrationImage}
               resizeMode="contain"
             />
@@ -46,23 +46,17 @@ export default function ReadyScreen() {
 
         {/* Actions en bas */}
         <View style={styles.actionsBlock}>
-          {/* Bouton Créer un compte */}
-          <TouchableOpacity
-            style={styles.btnPrimary}
-            activeOpacity={0.88}
+          <Button
+            title="Créer un compte"
+            variant="primary"
             onPress={() => router.push('/(auth)/register' as any)}
-          >
-            <Text style={styles.btnPrimaryText}>Créer un compte</Text>
-          </TouchableOpacity>
+          />
 
-          {/* Bouton J'ai déjà un compte */}
-          <TouchableOpacity
-            style={styles.btnSecondary}
-            activeOpacity={0.88}
+          <Button
+            title="J’ai déjà un compte"
+            variant="secondary"
             onPress={() => router.push('/(auth)' as any)}
-          >
-            <Text style={styles.btnSecondaryText}>J’ai déjà un compte</Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -88,8 +82,6 @@ const styles = StyleSheet.create({
     width: 140,
     height: 45,
   },
-
-  /* Section Centrale */
   mainSection: {
     flex: 1,
     alignItems: 'center',
@@ -110,46 +102,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: colors.primary, // Texte bleu comme demandé ("bleu foncé") ou primary
+    color: colors.primary,
     textAlign: 'center',
     lineHeight: 36,
   },
-
-  /* Actions */
   actionsBlock: {
     width: '100%',
     paddingHorizontal: spacing.lg,
     gap: spacing.sm,
-  },
-  btnPrimary: {
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: borderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  btnPrimaryText: {
-    color: colors.white,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  btnSecondary: {
-    backgroundColor: colors.background,
-    paddingVertical: 16,
-    borderRadius: borderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: colors.grayLight,
-  },
-  btnSecondaryText: {
-    color: colors.primary,
-    fontSize: 17,
-    fontWeight: '700',
   },
 });

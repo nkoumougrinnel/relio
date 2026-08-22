@@ -4,13 +4,13 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   Dimensions,
   StatusBar,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, spacing, borderRadius } from '../theme';
+import { colors, spacing } from '../theme';
+import { Button } from '../components/ui';
 
 const { width } = Dimensions.get('window');
 
@@ -42,13 +42,12 @@ export default function WelcomeScreen() {
         {/* Illustration au Centre */}
         <View style={styles.mainSection}>
           <View style={styles.illustrationContainer}>
-            {/* Éléments décoratifs (nuage bleu pâle) */}
             <View style={styles.cloudBackground}>
               <View style={styles.cloudPart1} />
               <View style={styles.cloudPart2} />
               <View style={styles.cloudPart3} />
             </View>
-            <Image 
+            <Image
               source={require('../assets/images/welcome-illustration.png')}
               style={styles.illustrationImage}
               resizeMode="contain"
@@ -58,23 +57,17 @@ export default function WelcomeScreen() {
 
         {/* Actions : Commencer & Se connecter */}
         <View style={styles.actionsSection}>
-          {/* Bouton Commencer (Onboarding / Sélection profil) */}
-          <TouchableOpacity
-            style={styles.btnPrimary}
-            activeOpacity={0.88}
+          <Button
+            title="Commencer"
+            variant="primary"
             onPress={() => router.push('/(onboarding)' as any)}
-          >
-            <Text style={styles.btnPrimaryText}>Commencer</Text>
-          </TouchableOpacity>
+          />
 
-          {/* Bouton Se connecter */}
-          <TouchableOpacity
-            style={styles.btnSecondary}
-            activeOpacity={0.88}
+          <Button
+            title="Se connecter"
+            variant="secondary"
             onPress={() => router.push('/(auth)' as any)}
-          >
-            <Text style={styles.btnSecondaryText}>Se connecter</Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -101,8 +94,6 @@ const styles = StyleSheet.create({
     width: 160,
     height: 150,
   },
-
-  /* Textes de Bienvenue */
   textSection: {
     marginTop: spacing.sm,
     alignItems: 'flex-start',
@@ -121,8 +112,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     lineHeight: 24,
   },
-
-  /* Section Centrale & Illustration */
   mainSection: {
     flex: 1,
     alignItems: 'center',
@@ -174,41 +163,8 @@ const styles = StyleSheet.create({
     height: '100%',
     zIndex: 1,
   },
-
-  /* Actions */
   actionsSection: {
     width: '100%',
     gap: spacing.sm,
-  },
-  btnPrimary: {
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: borderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  btnPrimaryText: {
-    color: colors.white,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  btnSecondary: {
-    backgroundColor: 'transparent',
-    paddingVertical: 14,
-    borderRadius: borderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: colors.grayLight,
-  },
-  btnSecondaryText: {
-    color: colors.grayVeryDark,
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
