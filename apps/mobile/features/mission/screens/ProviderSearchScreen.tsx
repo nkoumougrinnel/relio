@@ -17,12 +17,18 @@ export function ProviderSearchScreen() {
   const params = useLocalSearchParams<{
     problemText?: string;
     category?: string;
+    watch?: string;
   }>();
+  const isWatching = params.watch === 'true';
 
   const steps = serviceRequestService.getMatchingSteps();
   const currentStepIndex = useSteppedProgress(steps.length, STEP_INTERVAL_MS);
 
   useSimulatedDelay(MATCHING_DURATION_MS, () => {
+    if (isWatching) {
+      return;
+    }
+
     router.replace({
       pathname: '/(client)/demande/found',
       params: {

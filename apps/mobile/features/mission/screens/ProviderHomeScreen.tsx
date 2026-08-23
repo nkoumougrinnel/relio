@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { colors, spacing, borderRadius } from '../../../theme';
+import { colors, spacing, radius } from '../../../theme';
 import {
   BrandHeader,
   Button,
@@ -21,6 +21,7 @@ import {
 import { providerMissionService } from '../services/provider-mission.service';
 import { MissionOpportunityCard } from '../components/MissionOpportunityCard';
 import { AvailabilityCard } from '../components/AvailabilityCard';
+import { CompletedMissionCard } from '../components/CompletedMissionCard';
 
 export function ProviderHomeScreen() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export function ProviderHomeScreen() {
     ? providerMissionService.getOpportunities()
     : [];
   const summary = providerMissionService.getDailySummary();
+  const recentCompleted = providerMissionService.getRecentCompletedMissions();
   const opportunity = opportunities[index] ?? opportunities[0];
 
   const isFirst = index === 0;
@@ -41,6 +43,10 @@ export function ProviderHomeScreen() {
       pathname: '/(prestataire)/mission/detail',
       params: { id: missionId },
     } as any);
+  };
+
+  const openMissions = () => {
+    router.push('/(prestataire)/(tabs)/missions' as any);
   };
 
   return (
@@ -68,6 +74,52 @@ export function ProviderHomeScreen() {
         />
 
         <View style={styles.section}>
+          <Text style={[styles.sectionTitle, styles.standaloneTitle]}>
+            Aujourd&apos;hui
+          </Text>
+
+          <View style={styles.summaryGrid}>
+            <View style={styles.summaryRow}>
+              <StatCard
+                icon={
+                  <Feather name="briefcase" size={18} color={colors.primary} />
+                }
+                label="Missions"
+                value={`${summary.missionCount}`}
+                hint={summary.missionDetail}
+              />
+              <StatCard
+                icon={
+                  <Feather name="dollar-sign" size={18} color={colors.success} />
+                }
+                iconBackground="#E8F8F0"
+                label="Revenus"
+                value={summary.earnings}
+                hint="FCFA aujourd'hui"
+              />
+            </View>
+            <View style={styles.summaryRow}>
+              <StatCard
+                icon={
+                  <Feather name="star" size={18} color={colors.secondary} />
+                }
+                iconBackground="#FFF6DC"
+                label="Note moyenne"
+                value={summary.averageRating}
+                hint={summary.ratingDetail}
+              />
+              <StatCard
+                icon={<Feather name="zap" size={18} color={colors.info} />}
+                iconBackground="#E8F6FC"
+                label="Taux de réponse"
+                value={summary.responseRate}
+                hint={summary.responseDetail}
+              />
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View>
               <Text style={styles.sectionTitle}>Missions disponibles</Text>
@@ -81,12 +133,7 @@ export function ProviderHomeScreen() {
             </View>
 
             {opportunities.length > 0 && (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() =>
-                  router.push('/(prestataire)/(tabs)/missions' as any)
-                }
-              >
+              <TouchableOpacity activeOpacity={0.7} onPress={openMissions}>
                 <Text style={styles.seeAll}>Voir tout</Text>
               </TouchableOpacity>
             )}
@@ -166,28 +213,17 @@ export function ProviderHomeScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, styles.standaloneTitle]}>
-            Aujourd&apos;hui
-          </Text>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Activité récente</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={openMissions}>
+              <Text style={styles.seeAll}>Voir tout</Text>
+            </TouchableOpacity>
+          </View>
 
-          <View style={styles.summaryRow}>
-            <StatCard
-              icon={
-                <Feather name="check-circle" size={18} color={colors.primary} />
-              }
-              label="Missions"
-              value={`${summary.missionCount}`}
-              hint={summary.missionDetail}
-            />
-            <StatCard
-              icon={
-                <Feather name="dollar-sign" size={18} color={colors.success} />
-              }
-              iconBackground="#E8F8F0"
-              label="Revenus"
-              value={summary.earnings}
-              hint="aujourd'hui"
-            />
+          <View style={styles.activityList}>
+            {recentCompleted.map((activity) => (
+              <CompletedMissionCard key={activity.id} activity={activity} />
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -209,18 +245,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
-    backgroundColor: colors.white,
   },
   greeting: {
     fontSize: 22,
     fontWeight: '800',
     color: colors.grayVeryDark,
   },
+  greetingContext: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: colors.grayDark,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xs,
+  },
   availability: {
     marginHorizontal: spacing.lg,
     marginTop: spacing.md,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
   },
   section: {
     marginBottom: spacing.xl,
@@ -250,6 +291,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.primary,
   },
+  summaryGrid: {
+    gap: spacing.md,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
   navRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -275,7 +323,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEF4FF',
     paddingHorizontal: 14,
     paddingVertical: 6,
-    borderRadius: borderRadius.full,
+    borderRadius: radius.full,
     borderWidth: 1,
     borderColor: '#D4E3FF',
   },
@@ -288,8 +336,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: '800',
   },
-  summaryRow: {
-    flexDirection: 'row',
-    gap: spacing.md,
+  activityList: {
+    gap: spacing.sm + 2,
   },
 });

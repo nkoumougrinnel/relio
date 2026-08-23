@@ -54,29 +54,30 @@ export function SegmentedTabs<T extends string>({
 const styles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
-    backgroundColor: colors.white,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    gap: spacing.xs,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    marginHorizontal: spacing.lg,
+    marginTop: spacing.sm,
+    marginBottom: spacing.md,
+    backgroundColor: '#F3F5F8',
+    borderRadius: radius.lg,
+    padding: 4,
+    gap: 4,
   },
   tab: {
     flex: 1,
     paddingVertical: 10,
     alignItems: 'center',
-    borderRadius: radius.sm,
+    borderRadius: radius.md,
   },
   tabActive: {
-    backgroundColor: '#F0F6FF',
+    backgroundColor: colors.primary,
   },
   label: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: colors.grayDark,
   },
   labelActive: {
-    color: colors.primary,
+    color: colors.white,
     fontWeight: '700',
   },
 });

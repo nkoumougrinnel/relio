@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   right: {
     flex: 1,
-    paddingBottom: spacing.lg,
+    paddingBottom: spacing.xl,
   },
   stepTitle: {
     fontSize: 14,

@@ -180,7 +180,11 @@ export function ClientHomeScreen() {
                 key={request.id}
                 request={request}
                 size="comfortable"
-                onPress={openRequests}
+                onPress={() =>
+                  router.push(
+                    serviceRequestService.getRequestRoute(request) as any
+                  )
+                }
               />
             ))}
           </View>

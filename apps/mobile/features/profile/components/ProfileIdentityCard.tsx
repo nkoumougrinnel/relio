@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { colors, spacing, borderRadius } from '../../../theme';
-import { Avatar, Badge } from '../../../components/ui';
+import { Avatar } from '../../../components/ui';
 
 interface ProfileIdentityCardProps {
   name: string;
@@ -10,7 +9,6 @@ interface ProfileIdentityCardProps {
   phone: string;
   email?: string;
   specialty?: string;
-  badgeLabel?: string;
   onPress?: () => void;
 }
 
@@ -20,7 +18,6 @@ export function ProfileIdentityCard({
   phone,
   email,
   specialty,
-  badgeLabel,
   onPress,
 }: ProfileIdentityCardProps) {
   const content = (
@@ -28,24 +25,13 @@ export function ProfileIdentityCard({
       <Avatar source={avatarUrl} name={name} size={60} />
 
       <View style={styles.info}>
-        <View style={styles.nameRow}>
-          <Text style={styles.name}>{name}</Text>
-          {badgeLabel && (
-            <Badge
-              label={badgeLabel}
-              variant="success"
-              textStyle={styles.badgeText}
-            />
-          )}
-        </View>
+        <Text style={styles.name} numberOfLines={1}>
+          {name}
+        </Text>
         {specialty && <Text style={styles.specialty}>{specialty}</Text>}
         <Text style={styles.phone}>{phone}</Text>
         {email && <Text style={styles.email}>{email}</Text>}
       </View>
-
-      {onPress && (
-        <Feather name="chevron-right" size={22} color={colors.grayDark} />
-      )}
     </>
   );
 
@@ -74,20 +60,11 @@ const styles = StyleSheet.create({
   info: {
     flex: 1,
   },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 2,
-  },
   name: {
     fontSize: 18,
     fontWeight: '800',
     color: colors.grayVeryDark,
-  },
-  badgeText: {
-    fontSize: 9,
-    fontWeight: '800',
+    marginBottom: 2,
   },
   specialty: {
     fontSize: 13,
@@ -100,5 +77,6 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 12,
     color: colors.grayMedium,
+    marginTop: 2,
   },
 });

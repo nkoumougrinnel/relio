@@ -1,100 +1,174 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { colors, spacing, borderRadius } from '../../../theme';
-import { Button, Header } from '../../../components/ui';
+import { colors, spacing, radius } from '../../../theme';
+import { BottomBar, Button, Header } from '../../../components/ui';
 import { providerMissionService } from '../services/provider-mission.service';
 import { serviceCatalogService } from '../services/service-catalog.service';
+import { serviceRequestService } from '../services/service-request.service';
+
+const VISIBLE_PHOTOS = 3;
 
 export function MissionOfferScreen() {
   const router = useRouter();
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
 
   const offer = providerMissionService.getOffer();
   const category = serviceCatalogService.getCategoryById(offer.categoryId);
+  const opportunity = providerMissionService
+    .getOpportunities()
+    .find((item) => item.id === offer.id);
+  const amount = opportunity?.amount ?? offer.budgetRange;
+  const publishedAgo = opportunity?.publishedAgo ?? offer.publishedAgo;
+  const photos = [
+    serviceRequestService.getSamplePhotoUri(),
+    providerMissionService.getBillPhotoUri(),
+    serviceRequestService.getSamplePhotoUri(),
+    providerMissionService.getBillPhotoUri(),
+    serviceRequestService.getSamplePhotoUri(),
+  ];
+  const hiddenPhotos = Math.max(0, photos.length - VISIBLE_PHOTOS);
 
   const handleAccept = () => {
     router.push('/(prestataire)/mission/en-route' as any);
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
-      <Header title="Détail de la mission" showBack bordered />
+      <Header title="Détails de la mission" showBack style={styles.header} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerCard}>
+        <View style={styles.metaRow}>
           <View
             style={[
               styles.categoryBadge,
               { backgroundColor: category.iconBackground },
             ]}
           >
-            <Feather name={category.icon} size={16} color={category.iconColor} />
-            <Text style={[styles.categoryText, { color: category.iconColor }]}>
-              {offer.categoryLabel}
-            </Text>
+            {category.illustration ? (
+              <Image
+                source={category.illustration}
+                style={styles.categoryIllustration}
+                resizeMode="contain"
+              />
+            ) : (
+              <Feather
+                name={category.icon}
+                size={16}
+                color={category.iconColor}
+              />
+            )}
+            <Text style={styles.categoryText}>{offer.categoryLabel}</Text>
           </View>
+          <Text style={styles.publishedAgo}>{publishedAgo}</Text>
+        </View>
 
-          <Text style={styles.title}>{offer.title}</Text>
-          <Text style={styles.publishedAgo}>{offer.publishedAgo}</Text>
-
-          <View style={styles.budgetBox}>
-            <Text style={styles.budgetLabel}>Budget estimé Tarif Relio</Text>
-            <Text style={styles.budgetValue}>{offer.budgetRange}</Text>
+        <View style={styles.introRow}>
+          <View style={styles.introCopy}>
+            <Text style={styles.title}>{offer.title}</Text>
           </View>
+          {category.illustration ? (
+            <Image
+              source={category.illustration}
+              style={styles.introIllustration}
+              resizeMode="contain"
+            />
+          ) : null}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Détails de la demande</Text>
+          <Text style={styles.sectionTitle}>Description détaillée</Text>
+          <Text
+            style={styles.description}
+            numberOfLines={descriptionExpanded ? undefined : 4}
+          >
+            {offer.description}
+          </Text>
+          <TouchableOpacity
+            onPress={() => setDescriptionExpanded((current) => !current)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.moreLink}>
+              {descriptionExpanded ? 'Réduire' : 'Afficher plus'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.infoCard}>
-            <Text style={styles.description}>{offer.description}</Text>
-
-            <View style={styles.divider} />
-
-            <View style={styles.row}>
-              <Feather name="map-pin" size={16} color={colors.primary} />
-              <View style={styles.rowContent}>
-                <Text style={styles.rowLabel}>Localisation</Text>
-                <Text style={styles.rowValue}>
-                  {offer.location} · {offer.distance}
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.row}>
-              <Feather name="user" size={16} color={colors.primary} />
-              <View style={styles.rowContent}>
-                <Text style={styles.rowLabel}>Client</Text>
-                <Text style={styles.rowValue}>
-                  {offer.client.name} (
-                  {offer.client.verified ? 'Client Vérifié' : 'Client'} ⭐{' '}
-                  {offer.client.rating})
-                </Text>
-              </View>
-            </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Photos</Text>
+          <View style={styles.photoRow}>
+            {photos.slice(0, VISIBLE_PHOTOS).map((uri, index) => {
+              const isOverflow =
+                index === VISIBLE_PHOTOS - 1 && hiddenPhotos > 0;
+              return (
+                <View key={`${uri}-${index}`} style={styles.photo}>
+                  <Image source={{ uri }} style={styles.photoImage} />
+                  {isOverflow && (
+                    <View style={styles.photoOverlay}>
+                      <Text style={styles.photoOverlayText}>
+                        +{hiddenPhotos}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              );
+            })}
           </View>
         </View>
 
-        <Button
-          title="Accepter la mission"
-          variant="success"
-          onPress={handleAccept}
-          rightIcon={
-            <Feather name="check-circle" size={20} color={colors.white} />
-          }
-        />
+        <View style={styles.locationCard}>
+          <View style={styles.locationMap}>
+            <View style={styles.locationPin}>
+              <Feather name="map-pin" size={18} color={colors.white} />
+            </View>
+            <View style={styles.locationRipple} />
+          </View>
+          <View style={styles.locationMeta}>
+            <Text style={styles.locationText}>{offer.location}</Text>
+            <Text style={styles.locationDot}>•</Text>
+            <Text style={styles.locationDistance}>{offer.distance}</Text>
+          </View>
+        </View>
 
-        <View style={styles.bottomSpacer} />
+        <View style={styles.payCard}>
+          <Text style={styles.payLabel}>Rémunération</Text>
+          <Text style={styles.payValue}>{amount}</Text>
+        </View>
       </ScrollView>
+
+      <BottomBar>
+        <View style={styles.actions}>
+          <Button
+            title="Décliner"
+            variant="dangerOutline"
+            style={styles.declineBtn}
+            onPress={() => router.back()}
+            leftIcon={<Feather name="x" size={18} color={colors.error} />}
+          />
+          <Button
+            title="Accepter la mission"
+            variant="primary"
+            style={styles.acceptBtn}
+            onPress={handleAccept}
+            leftIcon={<Feather name="check" size={18} color={colors.white} />}
+          />
+        </View>
+      </BottomBar>
     </SafeAreaView>
   );
 }
@@ -104,106 +178,189 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  scrollContent: {
-    padding: spacing.lg,
-    gap: spacing.lg,
+  header: {
+    height: 64,
+    backgroundColor: colors.background,
   },
-  headerCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
+  scrollContent: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
   },
   categoryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: borderRadius.full,
-    alignSelf: 'flex-start',
-    marginBottom: spacing.xs,
+    gap: 8,
+    backgroundColor: '#FFF6DC',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: radius.full,
+  },
+  categoryIllustration: {
+    width: 18,
+    height: 18,
   },
   categoryText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '700',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '800',
     color: colors.grayVeryDark,
-    marginBottom: 4,
   },
   publishedAgo: {
-    fontSize: 12,
-    color: colors.grayMedium,
-    marginBottom: spacing.md,
-  },
-  budgetBox: {
-    backgroundColor: '#EEF4FF',
-    padding: spacing.md,
-    borderRadius: borderRadius.md,
-    borderWidth: 1,
-    borderColor: '#D4E3FF',
-  },
-  budgetLabel: {
-    fontSize: 11,
+    fontSize: 13,
     color: colors.grayDark,
-    fontWeight: '600',
-    textTransform: 'uppercase',
   },
-  budgetValue: {
-    fontSize: 18,
+  introRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.md,
+    marginBottom: spacing.xl,
+  },
+  introCopy: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 26,
     fontWeight: '800',
-    color: colors.primary,
+    lineHeight: 32,
+    color: colors.grayVeryDark,
+  },
+  introIllustration: {
+    width: 72,
+    height: 72,
     marginTop: 2,
   },
-  section: {
-    gap: spacing.xs,
+  locationCard: {
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.white,
+    marginBottom: spacing.md,
   },
-  sectionTitle: {
+  locationMap: {
+    height: 132,
+    backgroundColor: '#E8F1FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  locationRipple: {
+    position: 'absolute',
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: '#D4E4FF',
+  },
+  locationPin: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  locationMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    gap: 6,
+  },
+  locationText: {
     fontSize: 15,
     fontWeight: '700',
     color: colors.grayVeryDark,
   },
-  infoCard: {
+  locationDot: {
+    color: colors.grayMedium,
+  },
+  locationDistance: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: colors.primary,
+  },
+  payCard: {
     backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+  },
+  payLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    color: colors.grayMedium,
+    marginBottom: 6,
+  },
+  payValue: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.grayVeryDark,
+  },
+  section: {
+    marginBottom: spacing.xl,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: colors.grayVeryDark,
+    marginBottom: spacing.sm + 2,
   },
   description: {
-    fontSize: 14,
-    color: colors.grayDark,
-    lineHeight: 21,
+    fontSize: 16,
+    lineHeight: 26,
+    color: colors.grayVeryDark,
   },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: spacing.md,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  rowContent: {
-    flex: 1,
-  },
-  rowLabel: {
-    fontSize: 12,
-    color: colors.grayMedium,
-    fontWeight: '600',
-  },
-  rowValue: {
+  moreLink: {
+    marginTop: spacing.sm,
     fontSize: 14,
     fontWeight: '700',
-    color: colors.grayVeryDark,
-    marginTop: 1,
+    color: colors.primary,
   },
-  bottomSpacer: {
-    height: 40,
+  photoRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  photo: {
+    flex: 1,
+    aspectRatio: 1,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    backgroundColor: colors.surface,
+  },
+  photoImage: {
+    width: '100%',
+    height: '100%',
+  },
+  photoOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(33, 33, 33, 0.45)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoOverlayText: {
+    color: colors.white,
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  declineBtn: {
+    flex: 0.9,
+  },
+  acceptBtn: {
+    flex: 1.4,
   },
 });

@@ -89,4 +89,10 @@ export const serviceCatalogService = {
   getDefaultCategoryLabel(): string {
     return FALLBACK_CATEGORY.label;
   },
-};
+
+  getCategoryByLabel(label: string): ServiceCategory {
+    return (
+      CATEGORIES.find((category) => category.label === label) ?? FALLBACK_CATEGORY
+    );
+  },
+}

@@ -41,12 +41,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
     backgroundColor: colors.white,
   },
   logo: {
-    width: 96,
-    height: 54,
+    width: 108,
+    height: 61,
   },
   notificationBtn: {
     position: 'relative',

@@ -1,58 +1,84 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar } from 'react-native';
+import { View, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { colors, spacing } from '../../../theme';
-import { FilterChips, Header } from '../../../components/ui';
+import { EmptyState, Header, SegmentedTabs } from '../../../components/ui';
 import { serviceRequestService } from '../services/service-request.service';
 import { ServiceRequestCard } from '../components/ServiceRequestCard';
-import { ServiceRequestSummary } from '../types';
+import {
+  FeatherIconName,
+  ServiceRequestStatus,
+  ServiceRequestSummary,
+} from '../types';
+
+const EMPTY_COPY: Record<
+  ServiceRequestStatus,
+  { title: string; description: string; icon: FeatherIconName }
+> = {
+  pending: {
+    icon: 'clock',
+    title: 'Aucune demande en attente',
+    description:
+      'Vos recherches de professionnel apparaîtront ici le temps de trouver un prestataire.',
+  },
+  ongoing: {
+    icon: 'play-circle',
+    title: 'Aucune intervention en cours',
+    description:
+      "Dès qu'un professionnel sera attribué, le suivi de la mission s'affichera ici.",
+  },
+  done: {
+    icon: 'check-circle',
+    title: 'Aucune demande terminée',
+    description: 'Vos interventions passées et leurs détails apparaîtront ici.',
+  },
+};
 
 export function ClientRequestsScreen() {
   const router = useRouter();
+  const [status, setStatus] = useState<ServiceRequestStatus>('pending');
 
-  const filters = serviceRequestService.getFilters();
-  const [selectedFilter, setSelectedFilter] = useState(filters[0].id);
-
-  const requests = serviceRequestService.filterRequests(
-    serviceRequestService.getRequests(),
-    selectedFilter
-  );
-  const groups = serviceRequestService.groupByPeriod(requests);
+  const requests = serviceRequestService.getRequestsByStatus(status);
+  const empty = EMPTY_COPY[status];
 
   const handleOpenRequest = (request: ServiceRequestSummary) => {
-    router.push({
-      pathname: '/(client)/demande/mission',
-      params: {
-        missionId: request.id,
-        title: request.title,
-        status: request.status,
-        proName: request.providerName,
-      },
-    } as any);
+    router.push(serviceRequestService.getRequestRoute(request) as any);
   };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
-      <Header title="Mes demandes" bordered />
+      <Header title="Mes demandes" style={styles.header} />
 
-      <FilterChips
-        items={filters}
-        selectedId={selectedFilter}
-        onSelect={setSelectedFilter}
+      <SegmentedTabs
+        tabs={serviceRequestService.getTabs()}
+        value={status}
+        onChange={setStatus}
       />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {groups.map((group) => (
-          <View key={group.label} style={styles.group}>
-            <Text style={styles.groupLabel}>{group.label}</Text>
-
-            {group.requests.map((request) => (
+        {requests.length === 0 ? (
+          <EmptyState
+            variant="card"
+            icon={
+              <Feather
+                name={empty.icon}
+                size={28}
+                color={status === 'done' ? colors.success : colors.primary}
+              />
+            }
+            title={empty.title}
+            description={empty.description}
+          />
+        ) : (
+          <View style={styles.list}>
+            {requests.map((request) => (
               <ServiceRequestCard
                 key={request.id}
                 request={request}
@@ -60,9 +86,7 @@ export function ClientRequestsScreen() {
               />
             ))}
           </View>
-        ))}
-
-        <View style={styles.bottomSpacer} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -73,20 +97,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  header: {
+    height: 64,
+    backgroundColor: colors.background,
+  },
   scrollContent: {
-    padding: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xl,
     gap: spacing.md,
   },
-  group: {
-    gap: spacing.xs,
-  },
-  groupLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: colors.grayDark,
-    marginBottom: 4,
-  },
-  bottomSpacer: {
-    height: 40,
+  list: {
+    gap: spacing.md,
   },
 });

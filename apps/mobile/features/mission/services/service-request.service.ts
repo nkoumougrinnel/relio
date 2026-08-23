@@ -1,8 +1,8 @@
 import {
   ServiceRequestDraft,
-  ServiceRequestFilter,
   ServiceRequestStatus,
   ServiceRequestSummary,
+  ServiceRequestTab,
   TimelineStep,
 } from '../types';
 import { serviceCatalogService } from './service-catalog.service';
@@ -20,14 +20,15 @@ const MATCHING_STEPS = [
   'Sélection du meilleur match',
 ];
 
-const FILTERS: ServiceRequestFilter[] = [
-  { id: 'all', label: 'Toutes' },
-  { id: 'pending', label: 'En attente' },
-  { id: 'ongoing', label: 'En cours' },
-  { id: 'done', label: 'Terminées' },
-];
-
 const REQUESTS: ServiceRequestSummary[] = [
+  {
+    id: '5',
+    title: 'Prise électrique HS',
+    location: 'Bonapriso, Douala',
+    date: '23 août 2026 • 08:12',
+    status: 'pending',
+    categoryId: 'electricite',
+  },
   {
     id: '1',
     title: 'Climatisation réparée',
@@ -119,11 +120,6 @@ const TIMELINE_STEPS: TimelineStep[] = [
   { id: '10', title: 'Évaluation', time: 'À venir', state: 'pending' },
 ];
 
-export interface ServiceRequestGroup {
-  label: string;
-  requests: ServiceRequestSummary[];
-}
-
 export interface RequestDraftSeed {
   initialText?: string;
   category?: string;
@@ -169,6 +165,13 @@ export const serviceRequestService = {
     return '15 000 – 25 000 FCFA';
   },
 
+  /**
+   * Montant unique affiché au client, aligné sur la rémunération prestataire.
+   */
+  getPrestationPrice(): string {
+    return '25 000 FCFA';
+  },
+
   getMatchingSteps(): string[] {
     return MATCHING_STEPS;
   },
@@ -181,29 +184,56 @@ export const serviceRequestService = {
     return REQUESTS.slice(0, count);
   },
 
-  getFilters(): ServiceRequestFilter[] {
-    return FILTERS;
-  },
-
-  filterRequests(
-    requests: ServiceRequestSummary[],
-    filterId: string
-  ): ServiceRequestSummary[] {
-    if (filterId === 'all') {
-      return requests;
-    }
-    return requests.filter((request) => request.status === filterId);
+  getRequestsByStatus(status: ServiceRequestStatus): ServiceRequestSummary[] {
+    return REQUESTS.filter((request) => request.status === status);
   },
 
   /**
-   * Regroupement chronologique affiché dans « Mes demandes ».
+   * Demandes qui justifient un badge sur l'onglet (en attente ou en cours).
    */
-  groupByPeriod(requests: ServiceRequestSummary[]): ServiceRequestGroup[] {
+  hasActionableRequests(): boolean {
+    return REQUESTS.some(
+      (request) => request.status === 'pending' || request.status === 'ongoing'
+    );
+  },
+
+  getTabs(): ServiceRequestTab[] {
+    const pendingCount = this.getRequestsByStatus('pending').length;
+    const ongoingCount = this.getRequestsByStatus('ongoing').length;
+
     return [
-      { label: "Aujourd'hui", requests: requests.slice(0, 2) },
-      { label: 'Hier', requests: requests.slice(2, 3) },
-      { label: 'Plus tôt', requests: requests.slice(3) },
+      { id: 'pending', label: `En attente (${pendingCount})` },
+      { id: 'ongoing', label: `En cours (${ongoingCount})` },
+      { id: 'done', label: 'Terminées' },
     ];
+  },
+
+  /**
+   * Destination du détail : matching Relio tant que la demande est en attente,
+   * suivi de mission une fois un prestataire attribué.
+   */
+  getRequestRoute(request: ServiceRequestSummary) {
+    if (request.status === 'pending') {
+      return {
+        pathname: '/(client)/demande/searching',
+        params: {
+          problemText: request.title,
+          category: serviceCatalogService.getCategoryById(request.categoryId)
+            .label,
+          watch: 'true',
+        },
+      };
+    }
+
+    return {
+      pathname: '/(client)/demande/mission',
+      params: {
+        missionId: request.id,
+        title: request.title,
+        status: request.status,
+        proName: request.providerName,
+      },
+    };
   },
 
   getStatusLabel(status: ServiceRequestStatus): string {

@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { colors, spacing, borderRadius } from '../../../theme';
+import { Header } from '../../../components/ui';
 import { authService } from '../../auth/services/auth.service';
 import { profileService } from '../services/profile.service';
 import { ProfileIdentityCard } from '../components/ProfileIdentityCard';
@@ -70,23 +71,20 @@ export function ProviderProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
+      <Header title="Mon Compte Pro" bordered />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Mon Compte Pro</Text>
-        </View>
-
         <View style={styles.body}>
           <ProfileIdentityCard
             name={profile.fullName}
             avatarUrl={profile.avatarUrl}
             phone={profile.phone}
             specialty={profile.specialty}
-            badgeLabel={profile.verified ? 'PRO VÉRIFIÉ' : undefined}
           />
 
           <ProfileMenuSection
@@ -95,20 +93,21 @@ export function ProviderProfileScreen() {
           />
 
           <View style={styles.clientCard}>
-            <View style={styles.clientCardText}>
-              <Text style={styles.clientCardTitle}>
-                Passer à l&apos;espace Client
-              </Text>
-              <Text style={styles.clientCardSub}>
-                Commandez des services pour votre domicile.
-              </Text>
+            <View style={styles.clientIcon}>
+              <Feather name="home" size={20} color={colors.primary} />
             </View>
+            <Text style={styles.clientCardTitle}>Espace Client</Text>
+            <Text style={styles.clientCardSub}>
+              Commandez des services pour votre domicile.
+            </Text>
             <TouchableOpacity
               style={styles.switchClientBtn}
               onPress={() => router.replace('/(client)/(tabs)' as any)}
               activeOpacity={0.85}
             >
-              <Text style={styles.switchClientBtnText}>Passer en Client</Text>
+              <Text style={styles.switchClientBtnText}>
+                Passer à l&apos;espace Client
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -136,54 +135,51 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: spacing.xl,
   },
-  header: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: colors.grayVeryDark,
-  },
   body: {
     padding: spacing.lg,
     gap: spacing.lg,
   },
   clientCard: {
     backgroundColor: '#F0F6FF',
-    borderRadius: borderRadius.md,
-    padding: spacing.md,
-    flexDirection: 'row',
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#D4E5FF',
-    gap: spacing.md,
   },
-  clientCardText: {
-    flex: 1,
+  clientIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: spacing.sm + 2,
   },
   clientCardTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '800',
     color: colors.grayVeryDark,
+    textAlign: 'center',
   },
   clientCardSub: {
-    fontSize: 12,
+    fontSize: 13,
     color: colors.grayDark,
-    marginTop: 2,
+    textAlign: 'center',
+    marginTop: 4,
+    marginBottom: spacing.md,
   },
   switchClientBtn: {
     backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 8,
-    borderRadius: borderRadius.sm,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: 12,
+    borderRadius: borderRadius.full,
+    alignSelf: 'stretch',
+    alignItems: 'center',
   },
   switchClientBtnText: {
     color: colors.white,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '700',
   },
   logoutBtn: {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors, spacing, borderRadius } from '../../../theme';
+import { colors, spacing, radius, shadows } from '../../../theme';
 import { MissionOpportunity } from '../types';
 import { serviceCatalogService } from '../services/service-catalog.service';
 
@@ -25,14 +25,22 @@ export function MissionOpportunityCard({
     <TouchableOpacity style={styles.card} activeOpacity={0.95} onPress={onPress}>
       <View style={styles.header}>
         <View style={styles.categoryPill}>
-          <View
-            style={[
-              styles.categoryIcon,
-              { backgroundColor: category.iconBackground },
-            ]}
-          >
-            <Feather name={category.icon} size={14} color={category.iconColor} />
-          </View>
+          {category.illustration ? (
+            <Image
+              source={category.illustration}
+              style={styles.categoryIllustration}
+              resizeMode="contain"
+            />
+          ) : (
+            <View
+              style={[
+                styles.categoryIcon,
+                { backgroundColor: category.iconBackground },
+              ]}
+            >
+              <Feather name={category.icon} size={14} color={category.iconColor} />
+            </View>
+          )}
           <Text style={styles.categoryLabel}>{opportunity.categoryLabel}</Text>
         </View>
 
@@ -44,22 +52,27 @@ export function MissionOpportunityCard({
         {opportunity.description}
       </Text>
 
-      <View style={styles.locationRow}>
-        <Feather name="map-pin" size={15} color={colors.primary} />
-        <Text style={styles.locationText}>{opportunity.location}</Text>
-        <Text style={styles.separator}>•</Text>
-        <Text style={styles.distance}>📍 {opportunity.distance}</Text>
+      <View style={styles.locationCard}>
+        <View style={styles.locationMain}>
+          <View style={styles.pinCircle}>
+            <Feather name="map-pin" size={14} color={colors.primary} />
+          </View>
+          <Text style={styles.locationText}>{opportunity.location}</Text>
+        </View>
+        <View style={styles.distancePill}>
+          <Text style={styles.distance}>{opportunity.distance}</Text>
+        </View>
       </View>
 
       <View style={styles.footer}>
         <View style={styles.priceBlock}>
-          <Text style={styles.priceLabel}>Budget estimé</Text>
-          <Text style={styles.priceValue}>{opportunity.priceRange}</Text>
+          <Text style={styles.priceLabel}>Rémunération</Text>
+          <Text style={styles.priceValue}>{opportunity.amount}</Text>
         </View>
 
         <TouchableOpacity
           style={styles.openBtn}
-          activeOpacity={0.8}
+          activeOpacity={0.85}
           onPress={onPress}
         >
           <Text style={styles.openBtnText}>Voir la mission</Text>
@@ -74,32 +87,32 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md + 2,
+    borderRadius: radius.lg,
+    padding: spacing.md + 4,
     borderWidth: 1,
     borderColor: colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    ...shadows.sm,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm + 2,
   },
   categoryPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     backgroundColor: '#F5F8FF',
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: borderRadius.full,
+    paddingVertical: 5,
+    borderRadius: radius.full,
     borderWidth: 1,
     borderColor: '#E1EDFF',
+  },
+  categoryIllustration: {
+    width: 22,
+    height: 22,
   },
   categoryIcon: {
     width: 22,
@@ -118,75 +131,102 @@ const styles = StyleSheet.create({
     color: colors.grayMedium,
   },
   title: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '800',
     color: colors.grayVeryDark,
-    marginBottom: 4,
+    lineHeight: 24,
+    marginBottom: spacing.xs,
   },
   description: {
-    fontSize: 13,
+    fontSize: 14,
     color: colors.grayDark,
-    lineHeight: 18,
+    lineHeight: 20,
     marginBottom: spacing.md,
   },
-  locationRow: {
+  locationCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'space-between',
+    backgroundColor: '#F7FAFF',
+    borderRadius: radius.md,
+    paddingVertical: spacing.sm + 2,
+    paddingHorizontal: spacing.sm + 2,
     marginBottom: spacing.md,
-    backgroundColor: '#FAFCFF',
-    padding: spacing.xs + 2,
-    borderRadius: borderRadius.sm,
+    gap: spacing.sm,
+  },
+  locationMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    gap: spacing.sm,
+  },
+  pinCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#EEF4FF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   locationText: {
-    fontSize: 13,
-    fontWeight: '600',
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '700',
     color: colors.grayVeryDark,
   },
-  separator: {
-    color: colors.grayMedium,
-    marginHorizontal: 4,
+  distancePill: {
+    backgroundColor: colors.white,
+    borderRadius: radius.full,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#D4E3FF',
   },
   distance: {
     fontSize: 12,
     color: colors.primary,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: spacing.md,
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    paddingTop: spacing.sm + 2,
-    marginTop: 4,
+    paddingTop: spacing.md,
   },
   priceBlock: {
-    flex: 1,
+    flexShrink: 0,
   },
   priceLabel: {
     fontSize: 11,
     color: colors.grayMedium,
+    fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+    marginBottom: 2,
   },
   priceValue: {
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: '800',
     color: colors.primary,
   },
   openBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 9,
-    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.md + 2,
+    height: 44,
+    borderRadius: radius.full,
     gap: 6,
+    ...shadows.sm,
+    shadowColor: colors.primary,
   },
   openBtnText: {
     color: colors.white,
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '700',
   },
 });

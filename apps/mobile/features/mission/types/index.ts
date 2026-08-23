@@ -46,8 +46,8 @@ export interface ServiceRequestSummary {
   amount?: string;
 }
 
-export interface ServiceRequestFilter {
-  id: string;
+export interface ServiceRequestTab {
+  id: ServiceRequestStatus;
   label: string;
 }
 
@@ -154,7 +154,7 @@ export interface MissionOpportunity {
   description: string;
   location: string;
   distance: string;
-  priceRange: string;
+  amount: string;
   publishedAgo: string;
 }
 
@@ -165,6 +165,21 @@ export interface ProviderDailySummary {
   missionCount: number;
   missionDetail: string;
   earnings: string;
+  averageRating: string;
+  ratingDetail: string;
+  responseRate: string;
+  responseDetail: string;
+}
+
+/**
+ * Mission terminée et payée, affichée dans l'activité récente de l'accueil.
+ */
+export interface ProviderCompletedActivity {
+  id: string;
+  categoryId: string;
+  title: string;
+  date: string;
+  amount: string;
 }
 
 /**

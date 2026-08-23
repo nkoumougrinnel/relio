@@ -7,6 +7,7 @@ import {
   MissionSummary,
   MissionTrip,
   OngoingMission,
+  ProviderCompletedActivity,
   ProviderDailySummary,
   TimelineStep,
 } from '../types';
@@ -47,6 +48,17 @@ const MISSIONS: MissionSummary[] = [
     price: '15 000 FCFA',
     status: 'done',
     date: 'Hier, 16:45',
+  },
+  {
+    id: 'm4',
+    categoryId: 'climatisation',
+    categoryLabel: 'Climatisation',
+    title: 'Climatisation réparée',
+    clientName: 'Sophie T.',
+    location: 'Bonapriso, Douala',
+    price: '25 000 FCFA',
+    status: 'done',
+    date: '18 juin 2026',
   },
 ];
 
@@ -149,7 +161,7 @@ const OPPORTUNITIES: MissionOpportunity[] = [
       'Disjoncteur général qui saute continuellement depuis ce matin.',
     location: 'Akwa, Douala',
     distance: '1,2 km',
-    priceRange: '15 000 – 25 000 FCFA',
+    amount: '25 000 FCFA',
     publishedAgo: 'Il y a 4 min',
   },
   {
@@ -160,7 +172,7 @@ const OPPORTUNITIES: MissionOpportunity[] = [
     description: "Le split fuit goutte à goutte à l'intérieur du salon.",
     location: 'Bonapriso, Douala',
     distance: '2,8 km',
-    priceRange: '20 000 – 35 000 FCFA',
+    amount: '25 000 FCFA',
     publishedAgo: 'Il y a 12 min',
   },
   {
@@ -171,7 +183,7 @@ const OPPORTUNITIES: MissionOpportunity[] = [
     description: 'Robinet cassé au niveau du raccord tuyau.',
     location: 'Bally, Douala',
     distance: '3,5 km',
-    priceRange: '12 000 – 18 000 FCFA',
+    amount: '15 000 FCFA',
     publishedAgo: 'Il y a 25 min',
   },
 ];
@@ -179,8 +191,29 @@ const OPPORTUNITIES: MissionOpportunity[] = [
 const DAILY_SUMMARY: ProviderDailySummary = {
   missionCount: 2,
   missionDetail: '1 en cours · 1 terminée',
-  earnings: '28 500 FCFA',
+  earnings: '28 500',
+  averageRating: '4,9',
+  ratingDetail: '12 avis',
+  responseRate: '92 %',
+  responseDetail: 'cette semaine',
 };
+
+const RECENT_COMPLETED: ProviderCompletedActivity[] = [
+  {
+    id: 'c1',
+    categoryId: 'climatisation',
+    title: 'Climatisation réparée',
+    date: '18 juin · 10:35',
+    amount: '18 000 FCFA',
+  },
+  {
+    id: 'c2',
+    categoryId: 'plomberie',
+    title: "Fuite d'eau réparée",
+    date: '17 juin · 16:20',
+    amount: '12 500 FCFA',
+  },
+];
 
 export interface MissionTab {
   id: MissionStatus;
@@ -204,13 +237,13 @@ export const providerMissionService = {
     return [
       {
         id: 'available',
-        label: `Disponibles (${this.getMissionsByStatus('available').length})`,
+        label: `Disponibles (${this.getOpportunities().length})`,
       },
       {
         id: 'ongoing',
-        label: `En cours (${this.getMissionsByStatus('ongoing').length})`,
+        label: 'En cours',
       },
-      { id: 'done', label: 'Historique' },
+      { id: 'done', label: 'Terminées' },
     ];
   },
 
@@ -223,6 +256,10 @@ export const providerMissionService = {
 
   getDailySummary(): ProviderDailySummary {
     return DAILY_SUMMARY;
+  },
+
+  getRecentCompletedMissions(): ProviderCompletedActivity[] {
+    return RECENT_COMPLETED;
   },
 
   /**
